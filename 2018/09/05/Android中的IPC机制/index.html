@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="c5yB2B-3tswoQK7D0ZfZDqbSGvVzLxh-kwnbxyeTdaU" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android源码分析," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="IPC机制 IPC机制是iInter-Process Communication的缩写，即是进程间通信。  Linux自身的IPC机制 Linux本身就包含进程间通信机制，包括管道 、信号、内存映射、消息队列、信号量、共享内存以及套接字Socket等。  管道 管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进程在向管道写入数据后，另一进">
+<meta name="keywords" content="Android源码分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中的IPC机制">
+<meta property="og:url" content="http://yoursite.com/2018/09/05/Android中的IPC机制/index.html">
+<meta property="og:site_name" content="跬步">
+<meta property="og:description" content="IPC机制 IPC机制是iInter-Process Communication的缩写，即是进程间通信。  Linux自身的IPC机制 Linux本身就包含进程间通信机制，包括管道 、信号、内存映射、消息队列、信号量、共享内存以及套接字Socket等。  管道 管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进程在向管道写入数据后，另一进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Linux%E4%B8%8B%E7%9A%84%E4%BC%A0%E7%BB%9FIPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/%E5%AE%8C%E6%95%B4%E7%9A%84%20Binder%20IPC%20%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Client%E3%80%81Server%E3%80%81ServiceManager%E3%80%81Binder%E9%A9%B1%E5%8A%A8%E8%81%94%E7%B3%BB%E5%9B%BE">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88Server%EF%BC%89%E3%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF%EF%BC%88Client%EF%BC%89%E3%80%81DNS%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88ServiceManager%EF%BC%89%E4%BB%A5%E5%8F%8A%E8%B7%AF%E7%94%B1%E5%99%A8%EF%BC%88Binder%20%E9%A9%B1%E5%8A%A8%EF%BC%89%E4%B9%8B%E5%89%8D%E7%9A%84%E5%85%B3%E7%B3%BB">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Binder%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B%E5%9B%BE">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Binder%E9%80%9A%E4%BF%A1%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F">
+<meta property="og:updated_time" content="2018-09-05T16:00:50.587Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中的IPC机制">
+<meta name="twitter:description" content="IPC机制 IPC机制是iInter-Process Communication的缩写，即是进程间通信。  Linux自身的IPC机制 Linux本身就包含进程间通信机制，包括管道 、信号、内存映射、消息队列、信号量、共享内存以及套接字Socket等。  管道 管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进程在向管道写入数据后，另一进">
+<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/Linux%E4%B8%8B%E7%9A%84%E4%BC%A0%E7%BB%9FIPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/05/Android中的IPC机制/"/>
+
+
+
+
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #ffffff; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #ffffff, 0 0 5px #ffffff; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #ffffff;    /*上边框颜色*/
+        border-left-color: #ffffff;    /*左边框颜色*/
+    }
+</style>
+  <title>Android中的IPC机制 | 跬步</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113549877-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">跬步</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/05/Android中的IPC机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="作茧自缚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="跬步">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android中的IPC机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T23:54:51+08:00">
+                2018-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/05/Android中的IPC机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/05/Android中的IPC机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  6.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  22
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="IPC机制"><a href="#IPC机制" class="headerlink" title="IPC机制"></a>IPC机制</h1><blockquote>
+<p>IPC机制是iInter-Process Communication的缩写，即是进程间通信。</p>
+</blockquote>
+<h2 id="Linux自身的IPC机制"><a href="#Linux自身的IPC机制" class="headerlink" title="Linux自身的IPC机制"></a>Linux自身的IPC机制</h2><blockquote>
+<p>Linux本身就包含进程间通信机制，包括管道 、信号、内存映射、消息队列、信号量、共享内存以及套接字Socket等。</p>
+</blockquote>
+<h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><ul>
+<li>管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进程在向管道写入数据后，另一进程就可以从管道的另一端将其读取出来。<ul>
+<li><strong>普通管道</strong>：有两种限制，一是半双工的通信，数据仅仅能单向流动，二是仅仅能在具有亲缘关系的进程间使用。进程的亲缘关系一般是指父子进程关系。 </li>
+<li><strong>流管道</strong>：在普通管道的功能基础上增加了数据双向传输功能。</li>
+<li><strong>命名管道</strong>： 可用于具有亲缘关系进程间的通信，命名管道克服了管道没有名字的限制，因此，除具有管道所具有的功能外，它还允许无亲缘关系进程间的通信；   </li>
+</ul>
+</li>
+<li>缺点：速度慢，容量有限 ，普通管道只能进行父子进程通信。</li>
+</ul>
+<h3 id="信号Signal"><a href="#信号Signal" class="headerlink" title="信号Signal"></a>信号Signal</h3><ul>
+<li>信号是比较复杂的通信方式，用于通知接收进程有某种事情发生，除了用于进程间通信外，进程还可以发送信号给进程本身；Linux除了支持UNIX早期信号语义函数signal外，还支持语义符合POSIX.1标准的信号函数sigaction(实际上，该函数是基于BSD的，BSD即能实现可靠信号机制，又能够统一对外接口，用sigaction函数重新实现了signal函数的功能); </li>
+</ul>
+<h3 id="内存影射Mapped-memory"><a href="#内存影射Mapped-memory" class="headerlink" title="内存影射Mapped memory"></a>内存影射Mapped memory</h3><ul>
+<li>内存映射允许任何多个进程间通信，每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现它； </li>
+<li>缺点：能够非常easy控制容量，速度快，但要保持同步，比方一个进程在写的时候。还有一个进程要注意读写的问题，相当于线程中的线程安全。当然。共享内存区相同能够用作线程间通讯，只是没这个必要，线程间本来就已经共享了同一进程内的一块内存 </li>
+</ul>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><ul>
+<li>消息队列是消息的链接表，包括Posix消息队列system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息。消息队列克服了信号承载信息量少，管道只能承载无格式字节流以及缓冲区大小受限等缺点。 </li>
+<li>缺点：容量受到系统限制，且要注意第一次读的时候，要考虑上一次没有读完数据的问题 </li>
+</ul>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><ul>
+<li>信号量与其他进程间通信方式不大相同，它主要提供对进程间共享资源访问控制机制。相当于内存中的标志，进程可以根据它判定是否能够访问某些共享资源，同时，进程也可以修改该标志。除了用于访问控制外，还可用于进程同步。信号量有以下两种类型：二值信号量：最简单的信号量形式，信号灯的值只能取0或1，类似于互斥锁。计算信号量：信号量的值可以取任意非负值（当然受内核本身的约束）。</li>
+<li>缺点：不能传递复杂消息，仅仅能用来同步 。</li>
+</ul>
+<h3 id="共享内存Shared-memory"><a href="#共享内存Shared-memory" class="headerlink" title="共享内存Shared memory"></a>共享内存Shared memory</h3><ul>
+<li>共享内存就是映射一段能被其它进程所訪问的内存。这段共享内存由一个进程创建。但多个进程都能够訪问。共享内存是最快的 IPC 方式，它是针对其它进程间通信方式执行效率低而专门设计的。它往往与其它通信机制。如信号量，配合使用。来实现进程间的同步和通信。使得多个进程能够訪问同一块内存空间。是最快的可用IPC形式。是针对其它通信机制执行效率较低而设计的。往往与其它通信机制，如信号量结合使用。来达到进程间的同步及相互排斥。</li>
+<li>缺点：能够非常easy控制容量，速度快，但要保持同步，比方一个进程在写的时候。还有一个进程要注意读写的问题，相当于线程中的线程安全。当然。共享内存区相同能够用作线程间通讯，只是没这个必要，线程间本来就已经共享了同一进程内的一块内存 </li>
+</ul>
+<h3 id="套接字Socket"><a href="#套接字Socket" class="headerlink" title="套接字Socket"></a>套接字Socket</h3><ul>
+<li>套解口也是一种进程间通信机制，与其它通信机制不同的是。它可用于不同机器间的进程通信更为一般的进程间通信机制。可用于不同机器之间的进程间通信。起初是由Unix系统的BSD分支开发出来的，但如今一般能够移植到其它类Unix系统上：Linux和System V的变种都支持套接字。</li>
+<li>缺点：传输效率低，开销大，主要用在跨网络的进程间通信和本机上进程间的低速通信。 </li>
+</ul>
+<h3 id="Linux传统IPC通信原理"><a href="#Linux传统IPC通信原理" class="headerlink" title="Linux传统IPC通信原理"></a>Linux传统IPC通信原理</h3><ul>
+<li><p><strong>概念：</strong>通常的做法是消息发送方将要发送的数据存放在内存缓存区中，通过系统调用进入内核态。然后内核程序在内核空间分配内存，开辟一块内核缓存区，调用 copy<em>from</em>user() 函数将数据从用户空间的内存缓存区拷贝到内核空间的内核缓存区中。同样的，接收方进程在接收数据时在自己的用户空间开辟一块内存缓存区，然后内核程序调用 copy<em>to</em>user() 函数将数据从内核缓存区拷贝到接收进程的内存缓存区。这样数据发送方进程和数据接收方进程就完成了一次数据传输，我们称完成了一次进程间通信 </p>
+</li>
+<li><p><strong>内核空间与用户空间</strong>：现在操作系统都是采用的虚拟存储器，对于 32 位系统而言，它的寻址空间（虚拟存储空间）就是 2 的 32 次方，也就是 4GB。操作系统的核心是内核，独立于普通的应用程序，可以访问受保护的内存空间，也拥有访问底层硬件设备的权限。为了保护用户进程不能直接操作内核，并且保证内核的安全，操作系统从逻辑上将虚拟空间划分为用户空间（User Space）和内核空间（Kernel Space）。针对 Linux 操作系统而言，将最高的 1GB 字节供内核使用，称为内核空间；较低的 3GB 字节供各进程使用，称为用户空间。 也可以说，内核空间（Kernel）是系统内核运行的空间，用户空间（User Space）是用户程序运行的空间。为了保证安全性，它们之间是隔离的。 </p>
+</li>
+<li><p><strong>用户态与内核态以及系统调用</strong>：</p>
+<ul>
+<li><strong>系统调用</strong>：是突破内核空间与进程空间的隔离访问内核空间的唯一方式。系统调用主要由两个函数实现，分别是将数据从用户空间拷贝到内核空间的<code>copy_from_user()</code>和将数据从内核空间拷贝到用户空间的<code>copy_to_user()</code>。</li>
+<li><strong>用户态</strong>：当进程在执行用户自己的代码的时候，我们称其处于<strong>用户运行态（用户态）</strong>。此时处理器在特权级最低的（3级）用户代码中运行。 </li>
+<li><strong>内核态</strong>：当一个任务（进程）执行系统调用而陷入内核代码中执行时，称进程处于<strong>内核运行态（内核态）</strong>。此时处理器处于特权级最高的（0级）内核代码中执行。当进程处于内核态时，执行的内核代码会使用当前进程的内核栈。每个进程都有自己的内核栈。 </li>
+</ul>
+</li>
+<li><p><strong>图解</strong>：</p>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/Linux%E4%B8%8B%E7%9A%84%E4%BC%A0%E7%BB%9FIPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86" alt="Linux 下的传统 IPC 通信原理"></p>
+</li>
+<li><p><strong>问题</strong>：</p>
+<ul>
+<li>性能低下，一次数据传递需要经历：内存缓存区 –&gt; 内核缓存区 –&gt; 内存缓存区，需要 2 次数据拷贝；</li>
+<li>接收数据的缓存区由数据接收进程提供，但是接收进程并不知道需要多大的空间来存放将要传递过来的数据，因此只能开辟尽可能大的内存空间或者先调用 API 接收消息头来获取消息体的大小，这两种做法不是浪费空间就是浪费时间。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Android的IPC机制Binder"><a href="#Android的IPC机制Binder" class="headerlink" title="Android的IPC机制Binder"></a>Android的IPC机制Binder</h2><h3 id="Bindr相对于Linux自身IPC机制的优点"><a href="#Bindr相对于Linux自身IPC机制的优点" class="headerlink" title="Bindr相对于Linux自身IPC机制的优点"></a>Bindr相对于Linux自身IPC机制的优点</h3><ul>
+<li><strong>性能</strong>：只需进行一次数据拷贝，性能仅次于共享内存。并且Socket 作为一款通用接口，其传输效率低，开销大，主要用在跨网络的进程间通信和本机上进程间的低速通信。消息队列和管道采用存储-转发方式，即数据先从发送方缓存区拷贝到内核开辟的缓存区中，然后再从内核缓存区拷贝到接收方缓存区，至少有两次拷贝过程。共享内存虽然无需拷贝，但控制复杂，难以使用。Binder 只需要一次数据拷贝，性能上仅次于共享内存。 </li>
+<li><strong>安全性</strong>：传统的 IPC 没有任何安全措施，完全依赖上层协议来确保。首先传统的 IPC 接收方无法获得对方可靠的进程用户ID/进程ID（UID/PID），从而无法鉴别对方身份。Android 为每个安装好的 APP 分配了自己的 UID，故而进程的 UID 是鉴别进程身份的重要标志。传统的 IPC 只能由用户在数据包中填入 UID/PID，但这样不可靠，容易被恶意程序利用。可靠的身份标识只有由 IPC 机制在内核中添加。其次传统的 IPC 访问接入点是开放的，只要知道这些接入点的程序都可以和对端建立连接，不管怎样都无法阻止恶意程序通过猜测接收方地址获得连接。同时 Binder 既支持实名 Binder，又支持匿名 Binder，安全性高。 </li>
+<li><strong>稳定性</strong>：Binder 基于 C/S 架构，客户端（Client）有什么需求就丢给服务端（Server）去完成，架构清晰、职责明确又相互独立，自然稳定性更好。共享内存虽然无需拷贝，但是控制负责，难以使用。从稳定性的角度讲，Binder 机制是优于内存共享的。 </li>
+</ul>
+<h3 id="Binder跨进程通信原理"><a href="#Binder跨进程通信原理" class="headerlink" title="Binder跨进程通信原理"></a>Binder跨进程通信原理</h3><blockquote>
+<p>统的 IPC 机制如管道、Socket 都是内核的一部分，因此通过内核支持来实现进程间通信。但是Binder并不是Linux系统内核的一部分，因此需要通过动态内核可加载模块机制来动态添加一个内核模块（Binder驱动）运行再内存空间，来实现用户进程间通信。 </p>
+</blockquote>
+<ul>
+<li><p><strong>动态内核可加载模块</strong>（Loadable Kernel Module，LKM)：模块是具有独立功能的程序，它可以被单独编译，但是不能独立运行。它在运行时被链接到内核作为内核的一部分运行。 </p>
+</li>
+<li><p><strong>内存映射</strong>：内存映射简单的讲就是将用户空间的一块内存区域映射到内核空间。映射关系建立后，用户对这块内存区域的修改可以直接反应到内核空间；反之内核空间对这段区域的修改也能直接反应到用户空间中的内存区域。 内存映射通过mmp()来实现。</p>
+</li>
+<li><p><strong>Binder IPC实现原理</strong>：</p>
+<ul>
+<li><p>Binder IPC 是基于内存映射（mmap）来实现的，但是 mmap() 通常是用在有物理介质的文件系统上的。 比如进程中的用户区域是不能直接和物理设备打交道的，如果想要把磁盘上的数据读取到进程的用户区域，需要两次拷贝（磁盘–&gt;内核空间–&gt;用户空间）；通常在这种场景下 mmap() 就能发挥作用，通过在物理介质和用户空间之间建立映射，减少数据的拷贝次数，用内存读写取代I/O读写，提高文件读取效率。 而 Binder 并不存在物理介质，因此 Binder 驱动使用 mmap() 并不是为了在物理介质和用户空间之间建立映射，而是用来在内核空间创建数据接收的缓存空间。 </p>
+</li>
+<li><p><strong>完整的Binder IPC通信过程</strong></p>
+<ol>
+<li>首先 Binder 驱动在内核空间创建一个数据接收缓存区；</li>
+<li>接着在内核空间开辟一块内核缓存区，建立<strong>内核缓存区</strong>和<strong>内核中数据接收缓存区</strong>之间的映射关系，以及<strong>内核中数据接收缓存区</strong>和<strong>接收进程用户空间地址</strong>的映射关系；</li>
+<li>发送方进程通过系统调用 copy<em>from</em>user() 将数据 copy 到内核中的<strong>内核缓存区</strong>，由于内核缓存区和接收进程的用户空间存在内存映射，因此也就相当于把数据发送到了接收进程的用户空间，这样便完成了一次进程间的通信。</li>
+</ol>
+</li>
+<li><p><strong>完整的Bidner IPC通信过程图</strong></p>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/%E5%AE%8C%E6%95%B4%E7%9A%84%20Binder%20IPC%20%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Binder通信模型"><a href="#Binder通信模型" class="headerlink" title="Binder通信模型"></a>Binder通信模型</h3><blockquote>
+<p>一次完整的进程间通信必然至少包含两个进程，通常我们称通信的双方分别为客户端进程（Client）和服务端进程（Server），由于进程隔离机制的存在，通信双方必然需要借助 Binder 来实现。 Binder 是基于 C/S 架构的。由一系列的组件组成，包括 Client、Server、ServiceManager、Binder 驱动。其中 Client、Server、Service Manager 运行在用户空间，Binder 驱动运行在内核空间。其中 Service Manager 和 Binder 驱动由系统提供，而 Client、Server 由应用程序来实现。Client、Server 和 ServiceManager 均是通过系统调用 open、mmap 和 ioctl 来访问设备文件 /dev/binder，从而实现与 Binder 驱动的交互来间接的实现跨进程通信。 </p>
+</blockquote>
+<h4 id="Client、Server、ServiceManager、Binder驱动联系"><a href="#Client、Server、ServiceManager、Binder驱动联系" class="headerlink" title="Client、Server、ServiceManager、Binder驱动联系"></a>Client、Server、ServiceManager、Binder驱动联系</h4><p><img src="http://ouv36g1sw.bkt.clouddn.com/Client%E3%80%81Server%E3%80%81ServiceManager%E3%80%81Binder%E9%A9%B1%E5%8A%A8%E8%81%94%E7%B3%BB%E5%9B%BE" alt="Client、Server、ServiceManager、Binder驱动联系图">                                                    这几</p>
+<ul>
+<li><p>Client、Server、ServiceManager、Binder驱动间的联系就如同互联网中服务器（Server）、客户端（Client）、DNS域名服务器（ServiceManager）以及路由器（Binder 驱动）之前的关系。 </p>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88Server%EF%BC%89%E3%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF%EF%BC%88Client%EF%BC%89%E3%80%81DNS%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88ServiceManager%EF%BC%89%E4%BB%A5%E5%8F%8A%E8%B7%AF%E7%94%B1%E5%99%A8%EF%BC%88Binder%20%E9%A9%B1%E5%8A%A8%EF%BC%89%E4%B9%8B%E5%89%8D%E7%9A%84%E5%85%B3%E7%B3%BB" alt=""></p>
+</li>
+</ul>
+<h4 id="Binder驱动"><a href="#Binder驱动" class="headerlink" title="Binder驱动"></a>Binder驱动</h4><ul>
+<li>Binder 驱动就如同路由器一样，是整个通信的核心；驱动负责进程之间 Binder 通信的建立，Binder 在进程之间的传递，Binder 引用计数管理，数据包在进程之间的传递和交互等一系列底层支持。</li>
+</ul>
+<h4 id="ServiceManager-与实名-Binder"><a href="#ServiceManager-与实名-Binder" class="headerlink" title="ServiceManager 与实名 Binder"></a>ServiceManager 与实名 Binder</h4><ul>
+<li><strong>ServiceManager</strong> <ul>
+<li>与 DNS 类似，作用是将字符形式的 Binder 名字转化成 Client 中对该 Binder 的引用，使得 Client 能够通过 Binder 的名字获得对 Binder 实体的引用。</li>
+<li>ServierManager 本身也是是一个进程，Server 是另一个进程，Server 向 ServiceManager 中注册 Binder 必然涉及到进程间通信，当前实现进程间通信时却又要用到进程间通信。</li>
+<li>ServiceManager 和其他进程同样采用 Bidner 通信，ServiceManager 是 Server 端，有自己的 Binder 实体，其他进程都是 Client，需要通过这个 Binder 的引用来实现 Binder 的注册，查询和获取。</li>
+<li>ServiceManager 提供的 Binder 比较特殊，它没有名字也不需要注册。当一个进程使用 BINDER<em>SET</em>CONTEXT_MGR 命令将自己注册成 ServiceManager 时 ，Binder 驱动会自动为它创建 Binder 实体。其次这个 Binder 实体的引用在所有 Client 中都固定为 0 而无需通过其它手段获得。也就是说，一个 Server 想要向 ServiceManager 注册自己的 Binder 就必须通过这个 0 号引用来和 ServiceManager 的 Binder 通信。类比互联网，0 号引用就好比是域名服务器的地址，你必须域名先动态或者手工配置好。这里说的 Client 是相对于 ServiceManager 而言的，一个进程或者应用程序可能是提供服务的 Server，但对于 ServiceManager 来说它仍然是个 Client。 </li>
+</ul>
+</li>
+<li><strong>实名Binder</strong>：注册了名字的 Binder 叫实名Binder，就像网站一样除了除了有 IP 地址以外还有自己的网址，相对于域名更加可读易记。</li>
+<li><strong>匿名Binder：</strong>Server端可以通过已经建立的Binder连接将<strong>新</strong>创建的Binder实体传给Client，当然这条已经建立的Binder连接必须是通过实名Binder实现。由于这个Binder没有向ServiceManage注册名字，所以是个匿名Binder。Client将会收到这个匿名Binder的引用，通过这个引用向位于Server中的实体发送请求。匿名Binder为通信双方建立一条私密通道，只要Server没有把匿名Binder发给别的进程，别的进程就无法通过穷举或猜测等任何方式获得该Binder的引用，向该Binder发送请求。 </li>
+</ul>
+<h4 id="Service向ServiceManager注册Binder"><a href="#Service向ServiceManager注册Binder" class="headerlink" title="Service向ServiceManager注册Binder"></a>Service向ServiceManager注册Binder</h4><ol>
+<li>Server创建了Binder实体，为其取一个字符形式，可读易记的名字；</li>
+<li>Server将这个Binder连同名字以数据包的形式通过Binder驱动发送给ServiceManager，通知ServiceManager注册一个名叫张三的Binder，它位于某个Server中；</li>
+<li>驱动为这个穿过进程边界的Binder创建位于内核中的实体节点以及ServiceManager对实体的引用，将名字及新建的引用打包传递给ServiceManager；</li>
+<li>ServiceManager收数据包后，从中取出名字和引用填入一张查找表中；</li>
+</ol>
+<h4 id="Client-获得实名-Binder-的引用"><a href="#Client-获得实名-Binder-的引用" class="headerlink" title="Client 获得实名 Binder 的引用"></a>Client 获得实名 Binder 的引用</h4><ol>
+<li>Server 向 ServiceManager 中注册了 Binder 以后， Client 就能通过名字获得 Binder 的引用了。</li>
+<li>Client 利用保留的 0 号引用向 ServiceManager 请求访问某个 Binder: 我申请访问名字叫张三的 Binder 引用。</li>
+<li>ServiceManager 收到这个请求后从请求数据包中取出 Binder 名称，在查找表里找到对应的条目，取出对应的 Binder 引用作为回复发送给发起请求的 Client。</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>：从面向对象的角度看，Server 中的 Binder 实体现在有两个引用：一个位于 ServiceManager 中，一个位于发起请求的 Client 中。如果接下来有更多的 Client 请求该 Binder，系统中就会有更多的引用指向该 Binder ，就像 Java 中一个对象有多个引用一样。 </p>
+</blockquote>
+<h3 id="Binder通信过程"><a href="#Binder通信过程" class="headerlink" title="Binder通信过程"></a>Binder通信过程</h3><ul>
+<li><p><strong>通信过程步骤：</strong></p>
+<ol>
+<li>首先，一个进程使用 BINDER<em>SET</em>CONTEXT_MGR 命令通过 Binder 驱动将自己注册成为 ServiceManager；</li>
+<li>Server 通过驱动向 ServiceManager 中注册 Binder（Server 中的 Binder 实体），表明可以对外提供服务。驱动为这个 Binder 创建位于内核中的实体节点以及 ServiceManager 对实体的引用，将名字以及新建的引用打包传给 ServiceManager，ServiceManger 将其填入查找表。</li>
+<li>Client 通过名字，在 Binder 驱动的帮助下从 ServiceManager 中获取到对 Binder 实体的引用，通过这个引用就能实现和 Server 进程的通信。</li>
+</ol>
+</li>
+<li><p><strong>通信过程图：</strong></p>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/Binder%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B%E5%9B%BE" alt=""></p>
+</li>
+</ul>
+<h3 id="Binder通信过程中的代理模式"><a href="#Binder通信过程中的代理模式" class="headerlink" title="Binder通信过程中的代理模式"></a>Binder通信过程中的代理模式</h3><ol>
+<li><p>跨进程通信的过程都有Binder驱动参与，在数据流经过Binder驱动的时候，驱动会对数据做一层转换。</p>
+</li>
+<li><p>当A进程想获取B进程中的object时，驱动不会真的把object返回给A，而是返回一个跟object看起来一模一样的代理对象objectProxy。这个 objectProxy 具有和 object 一摸一样的方法，但是这些方法并没有 B 进程中 object 对象那些方法的能力，这些方法只需要把把请求参数交给驱动即可。对于 A 进程来说和直接调用 object 中的方法是一样的。 </p>
+</li>
+<li><p>当 Binder 驱动接收到 A 进程的消息后，发现这是个 objectProxy 就去查询自己维护的表单，一查发现这是 B 进程 object 的代理对象。于是就会去通知 B 进程调用 object 的方法，并要求 B 进程把返回结果发给自己。当驱动拿到 B 进程的返回结果后就会转发给 A 进程，一次通信就完成了。 </p>
+</li>
+<li><p><strong>Binder通信过程中代理模式</strong>实现图如下：</p>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/Binder%E9%80%9A%E4%BF%A1%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F" alt=""></p>
+</li>
+</ol>
+<h3 id="Binder完整定义"><a href="#Binder完整定义" class="headerlink" title="Binder完整定义"></a>Binder完整定义</h3><ul>
+<li>从进程间通信的角度看，Binder 是一种进程间通信的机制；</li>
+<li>从 Server 进程的角度看，Binder 指的是 Server 中的 Binder 实体对象；</li>
+<li>从 Client 进程的角度看，Binder 指的是对 Binder 代理对象，是 Binder 实体对象的一个远程代理</li>
+<li>从传输过程的角度看，Binder 是一个可以跨进程传输的对象；Binder 驱动会对这个跨越进程边界的对象对一点点特殊处理，自动完成代理对象和本地对象之间的转换。</li>
+</ul>
+<h2 id="手动编码实现跨进程调用"><a href="#手动编码实现跨进程调用" class="headerlink" title="手动编码实现跨进程调用"></a>手动编码实现跨进程调用</h2><h3 id="各类的职责描述"><a href="#各类的职责描述" class="headerlink" title="各类的职责描述"></a>各类的职责描述</h3><ul>
+<li><strong>IBinder</strong> : IBinder 是一个接口，代表了一种跨进程通信的能力。只要实现了这个借口，这个对象就能跨进程传输；</li>
+<li><strong>IInterface</strong> : IInterface 代表的就是 Server 进程对象具备什么样的能力（能提供哪些方法，其实对应的就是 AIDL 文件中定义的接口）；</li>
+<li><strong>Binder</strong> : Java 层的 Binder 类，代表的其实就是 Binder 本地对象。BinderProxy 类是 Binder 类的一个内部类，它代表远程进程的 Binder 对象的本地代理；这两个类都继承自 IBinder, 因而都具有跨进程传输的能力；实际上，在跨越进程的时候，Binder 驱动会自动完成这两个对象的转换；</li>
+<li><strong>Stub</strong> : AIDL 的时候，编译工具会给我们生成一个名为 Stub 的静态内部类；这个类继承了 Binder, 说明它是一个 Binder 本地对象，它实现了 IInterface 接口，表明它具有 Server 承诺给 Client 的能力；Stub 是一个抽象类，具体的 IInterface 的相关实现需要开发者自己实现。</li>
+</ul>
+<h3 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h3><ul>
+<li><p><strong>服务端：</strong></p>
+<ol>
+<li><p>定义一个 BookManager 接口，BookManager 继承自 IIterface，表明服务端需要实现的方法。</p>
+</li>
+<li><p>实现一个跨进程调用对象 Stub。Stub 继承 Binder, 说明它是一个 Binder 本地对象；实现 IInterface 接口，表明具有 Server 承诺给 Client 的能力；Stub 是一个抽象类，具体的 IInterface 的相关实现需要调用方自己实现。 </p>
+</li>
+<li><p>Stub 类中的 <code>asInterface</code> 和 <code>onTransact</code> </p>
+<ul>
+<li><strong>asInterface</strong> ：当 Client 端在创建和服务端的连接，调用 bindService 时需要创建一个 ServiceConnection 对象作为入参。在 ServiceConnection 的回调方法 onServiceConnected 中 会通过这个 asInterface(IBinder binder) 拿到 BookManager 对象，这个 IBinder 类型的入参 binder 是驱动传给我们的，正如代码中看到的一样，方法中会去调用 binder.queryLocalInterface() 去查找 Binder 本地对象，如果找到了就说明 Client 和 Server 在同一进程，那么这个 binder 本身就是 Binder 本地对象，可以直接使用。否则说明是 binder 是个远程对象，也就是 BinderProxy。因此需要我们创建一个代理对象 Proxy，通过这个代理对象来是实现远程访问。 </li>
+<li><strong>onTransact：</strong>响应接收调用</li>
+</ul>
+</li>
+<li><p>Proxy代理类：代理类实现 BookManager 接口 ， Stub 类中，addBook(Book book) 是一个抽象方法，Server 端需要去实现它。</p>
+<ul>
+<li>如果 Client 和 Server 在同一个进程，那么直接就是调用这个方法。</li>
+<li>如果是远程调用，Client 想要调用 Server 的方法就需要通过 Binder 代理来完成，也就是上面的 Proxy。</li>
+<li>在 Proxy 中的 addBook() 方法中首先通过 Parcel 将数据序列化，然后调用 remote.transact()。正如前文所述 Proxy 是在 Stub 的 asInterface 中创建，能走到创建 Proxy 这一步就说明 Proxy 构造函数的入参是 BinderProxy，即这里的 remote 是个 BinderProxy 对象。最终通过一系列的函数调用，Client 进程通过系统调用陷入内核态，Client 进程中执行 addBook() 的线程挂起等待返回；驱动完成一系列的操作之后唤醒 Server 进程，调用 Server 进程本地对象的 onTransact()。最终又走到了 Stub 中的 onTransact() 中，onTransact() 根据函数编号调用相关函数（在 Stub 类中为 BookManager 接口中的每个函数中定义了一个编号，只不过上面的源码中我们简化掉了；在跨进程调用的时候，不会传递函数而是传递编号来指明要调用哪个函数）；我们这个例子里面，调用了 Binder 本地对象的 addBook() 并将结果返回给驱动，驱动唤醒 Client 进程里刚刚挂起的线程并将结果返回。 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class Proxy implements BookManager &#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    public Proxy(IBinder remote) &#123;</span><br><span class="line">        this.remote = remote;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void addBook(Book book) throws RemoteException &#123;</span><br><span class="line"></span><br><span class="line">        Parcel data = Parcel.obtain();</span><br><span class="line">        Parcel replay = Parcel.obtain();</span><br><span class="line">        try &#123;</span><br><span class="line">            data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">            if (book != null) &#123;</span><br><span class="line">                data.writeInt(1);</span><br><span class="line">                book.writeToParcel(data, 0);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                data.writeInt(0);</span><br><span class="line">            &#125;</span><br><span class="line">            remote.transact(Stub.TRANSAVTION_addBook, data, replay, 0);</span><br><span class="line">            replay.readException();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            replay.recycle();</span><br><span class="line">            data.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+    
+       <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------------The End-------------</div>
+    
+</div>
+      </div>
+    
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android源码分析/" <i class="fa fa-tag"></i>Android源码分析</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/02/API-Guide之Device compatibility/" rel="next" title="API-Guide之设备兼容性">
+                <i class="fa fa-chevron-left"></i> API-Guide之设备兼容性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/05/Binder机制/" rel="prev" title="Binder机制">
+                Binder机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-hoofoo-share-title">分享到：</div>
+<div class="-hoofoo-share-buttons">
+    <div class="-mob-share-weibo -hoofoo-share-weibo -hoofoo-share-ui-button"><i class="fa fa-weibo" aria-hidden="true"></i></div>
+    <div class="-mob-share-weixin -hoofoo-share-weixin -hoofoo-share-ui-button"><i class="fa fa-weixin" aria-hidden="true"></i></div>
+    <div class="-mob-share-qq -hoofoo-share-qq -hoofoo-share-ui-button"><i class="fa fa-qq" aria-hidden="true"></i></div>
+    <div class="-mob-share-twitter -hoofoo-share-twitter -hoofoo-share-ui-button"><i class="fa fa-twitter" aria-hidden="true"></i></div>
+    <div class="-hoofoo-share-more -hoofoo-share-ui-button -mob-share-open"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></div>
+</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-weixin"><p>微信</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+        <li class="-mob-share-renren"><p>人人网</p></li>
+        <li class="-mob-share-kaixin"><p>开心网</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-youdao"><p>有道云笔记</p></li>
+        <li class="-mob-share-mingdao"><p>明道</p></li>
+        <li class="-mob-share-pengyou"><p>朋友网</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+        <li class="-mob-share-pocket"><p>Pocket</p></li>
+        <li class="-mob-share-google"><p>Google+</p></li>
+        <li class="-mob-share-tumblr"><p>Tumblr</p></li>
+        <li class="-mob-share-instapaper"><p>Instapaper</p></li>
+        <li class="-mob-share-linkedin"><p>Linkedin</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=253a344399ff0"></script>
+<!--MOB SHARE END-->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">作茧自缚</p>
+              <p class="site-description motion-element" itemprop="description">格物致知</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IPC机制"><span class="nav-number">1.</span> <span class="nav-text">IPC机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux自身的IPC机制"><span class="nav-number">1.1.</span> <span class="nav-text">Linux自身的IPC机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#管道"><span class="nav-number">1.1.1.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号Signal"><span class="nav-number">1.1.2.</span> <span class="nav-text">信号Signal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存影射Mapped-memory"><span class="nav-number">1.1.3.</span> <span class="nav-text">内存影射Mapped memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列"><span class="nav-number">1.1.4.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量"><span class="nav-number">1.1.5.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存Shared-memory"><span class="nav-number">1.1.6.</span> <span class="nav-text">共享内存Shared memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#套接字Socket"><span class="nav-number">1.1.7.</span> <span class="nav-text">套接字Socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux传统IPC通信原理"><span class="nav-number">1.1.8.</span> <span class="nav-text">Linux传统IPC通信原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android的IPC机制Binder"><span class="nav-number">1.2.</span> <span class="nav-text">Android的IPC机制Binder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bindr相对于Linux自身IPC机制的优点"><span class="nav-number">1.2.1.</span> <span class="nav-text">Bindr相对于Linux自身IPC机制的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder跨进程通信原理"><span class="nav-number">1.2.2.</span> <span class="nav-text">Binder跨进程通信原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder通信模型"><span class="nav-number">1.2.3.</span> <span class="nav-text">Binder通信模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Client、Server、ServiceManager、Binder驱动联系"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Client、Server、ServiceManager、Binder驱动联系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder驱动"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">Binder驱动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServiceManager-与实名-Binder"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">ServiceManager 与实名 Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Service向ServiceManager注册Binder"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">Service向ServiceManager注册Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Client-获得实名-Binder-的引用"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">Client 获得实名 Binder 的引用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder通信过程"><span class="nav-number">1.2.4.</span> <span class="nav-text">Binder通信过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder通信过程中的代理模式"><span class="nav-number">1.2.5.</span> <span class="nav-text">Binder通信过程中的代理模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder完整定义"><span class="nav-number">1.2.6.</span> <span class="nav-text">Binder完整定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动编码实现跨进程调用"><span class="nav-number">1.3.</span> <span class="nav-text">手动编码实现跨进程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#各类的职责描述"><span class="nav-number">1.3.1.</span> <span class="nav-text">各类的职责描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现过程"><span class="nav-number">1.3.2.</span> <span class="nav-text">实现过程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">作茧自缚</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">63k</span>
+  
+</div>
+
+
+  <div class="powered-by">  个人专属</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">博客 </div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+  <a href="https://github.com/xuqinzz"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zhizhi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/09/05/Android中的IPC机制/';
+          this.page.identifier = '2018/09/05/Android中的IPC机制/';
+          this.page.title = 'Android中的IPC机制';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zhizhi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+<script type="text/javascript">
+    //微信二维码点击背景关闭
+    $('body').delegate('.-mob-share-weixin-qrcode-bg','click', function(){
+         $(".-mob-share-weixin-qrcode-close").trigger("click");
+    }); 
+</script>
+
+<script type="text/javascript" color="255,132,0" opacity='0.6' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+</body>
+</html>
