@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="c5yB2B-3tswoQK7D0ZfZDqbSGvVzLxh-kwnbxyeTdaU" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="LRUCache算法中LRU是指Last Recently Used，也就是最近最少使用算法。当缓存控件满了的时候，将最近最少使用的数据从缓存控件中删除以增加缓存空间来缓存新内容。这个算法内部有一个缓存列表，每当一个数据被访问的时候，改数据就会被提到列表头部，蓑衣列表尾部的数据就是最近最不常是使用的了，当缓存空间不足，就会删除列表尾部的缓存数据。  LRUCache源码解析12345678910">
+<meta name="keywords" content="Android基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LRUCache原理">
+<meta property="og:url" content="http://yoursite.com/2018/02/04/LRUCache原理/index.html">
+<meta property="og:site_name" content="跬步">
+<meta property="og:description" content="LRUCache算法中LRU是指Last Recently Used，也就是最近最少使用算法。当缓存控件满了的时候，将最近最少使用的数据从缓存控件中删除以增加缓存空间来缓存新内容。这个算法内部有一个缓存列表，每当一个数据被访问的时候，改数据就会被提到列表头部，蓑衣列表尾部的数据就是最近最不常是使用的了，当缓存空间不足，就会删除列表尾部的缓存数据。  LRUCache源码解析12345678910">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/LinkedHashMap%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/LinkedHashMap%E7%9A%84remove%E8%BF%87%E7%A8%8B">
+<meta property="og:updated_time" content="2018-02-09T15:06:11.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LRUCache原理">
+<meta name="twitter:description" content="LRUCache算法中LRU是指Last Recently Used，也就是最近最少使用算法。当缓存控件满了的时候，将最近最少使用的数据从缓存控件中删除以增加缓存空间来缓存新内容。这个算法内部有一个缓存列表，每当一个数据被访问的时候，改数据就会被提到列表头部，蓑衣列表尾部的数据就是最近最不常是使用的了，当缓存空间不足，就会删除列表尾部的缓存数据。  LRUCache源码解析12345678910">
+<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/LinkedHashMap%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/04/LRUCache原理/"/>
+
+
+
+
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #ffffff; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #ffffff, 0 0 5px #ffffff; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #ffffff;    /*上边框颜色*/
+        border-left-color: #ffffff;    /*左边框颜色*/
+    }
+</style>
+  <title>LRUCache原理 | 跬步</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113549877-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">跬步</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/04/LRUCache原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="作茧自缚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="跬步">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LRUCache原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-04T22:51:44+08:00">
+                2018-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Android基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/04/LRUCache原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/04/LRUCache原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>LRUCache算法中LRU是指Last Recently Used，也就是最近最少使用算法。当缓存控件满了的时候，将最近最少使用的数据从缓存控件中删除以增加缓存空间来缓存新内容。这个算法内部有一个缓存列表，每当一个数据被访问的时候，改数据就会被提到列表头部，蓑衣列表尾部的数据就是最近最不常是使用的了，当缓存空间不足，就会删除列表尾部的缓存数据。</p>
+</blockquote>
+<h2 id="LRUCache源码解析"><a href="#LRUCache源码解析" class="headerlink" title="LRUCache源码解析"></a>LRUCache源码解析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * LruCache通过强引用来缓存一定数量的值，每当一个值被访问时，这个值就会移动到缓存列表的头部。</span><br><span class="line"> * 如果插入数据时发现缓存不够，就会将队列中访问次数最少的数据删掉。</span><br><span class="line"> */</span><br><span class="line">public class LruCache&lt;K, V&gt; &#123;</span><br><span class="line">	// 存放缓存内容的map</span><br><span class="line">    private final LinkedHashMap&lt;K, V&gt; map;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Size of this cache in units. Not necessarily the number of elements. </span><br><span class="line">     * 当前缓存已使用大小，不一定是元素的个数</span><br><span class="line">     */</span><br><span class="line">    private int size;</span><br><span class="line">    // 内存最大值</span><br><span class="line">    private int maxSize;</span><br><span class="line">    // 各个方法被调用的次数</span><br><span class="line">    private int putCount;</span><br><span class="line">    private int createCount;</span><br><span class="line">    private int evictionCount;</span><br><span class="line">    private int hitCount;</span><br><span class="line">    private int missCount;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param maxSize for caches that do not override &#123;@link #sizeOf&#125;, this is</span><br><span class="line">     *     the maximum number of entries in the cache. For all other caches,</span><br><span class="line">     *     this is the maximum sum of the sizes of the entries in this cache.</span><br><span class="line">     * 构造方法 传入maxSize是缓存的最大值</span><br><span class="line">     */</span><br><span class="line">    public LruCache(int maxSize) &#123;</span><br><span class="line">        if (maxSize &lt;= 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;maxSize &lt;= 0&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        this.maxSize = maxSize;</span><br><span class="line">        // 初始化LinkedHashMap</span><br><span class="line">        // 第一个参数是初始容量</span><br><span class="line">        // 第二个参数为填装因子或加载因子</span><br><span class="line">        // 第三个参数为排序模式，true表示在访问的时候进行排序，否则只在插入的时候排序。</span><br><span class="line">        this.map = new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Sets the size of the cache.</span><br><span class="line">     * 重置最大缓存</span><br><span class="line">     * @param maxSize The new maximum size.</span><br><span class="line">     */</span><br><span class="line">    public void resize(int maxSize) &#123;</span><br><span class="line">        if (maxSize &lt;= 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;maxSize &lt;= 0&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            this.maxSize = maxSize;</span><br><span class="line">        &#125;</span><br><span class="line">        trimToSize(maxSize);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the value for &#123;@code key&#125; if it exists in the cache or can be</span><br><span class="line">     * created by &#123;@code #create&#125;. If a value was returned, it is moved to the</span><br><span class="line">     * head of the queue. This returns null if a value is not cached and cannot</span><br><span class="line">     * be created.</span><br><span class="line">     * 通过Key获取缓存的数据，如果通过这个方法得到的需要的元素,那么该元素会被放在缓存队列的头部</span><br><span class="line">     */</span><br><span class="line">    public final V get(K key) &#123;</span><br><span class="line">        if (key == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;key == null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        V mapValue;</span><br><span class="line">        // 同步代码块</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">        	// 从LinkedHashMap中获取数据</span><br><span class="line">            mapValue = map.get(key);</span><br><span class="line">            if (mapValue != null) &#123;</span><br><span class="line">                hitCount++;</span><br><span class="line">                return mapValue;</span><br><span class="line">            &#125;</span><br><span class="line">            missCount++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*</span><br><span class="line">         * Attempt to create a value. This may take a long time, and the map</span><br><span class="line">         * may be different when create() returns. If a conflicting value was</span><br><span class="line">         * added to the map while create() was working, we leave that value in</span><br><span class="line">         * the map and release the created value.</span><br><span class="line">         * 如果通过Key从缓存集合中获取缓存不到的数据，就尝试使用creat(key)方法创造一个新数据。</span><br><span class="line">         * create(key)默认返回的也是null,需要重写该方法</span><br><span class="line">         */</span><br><span class="line"></span><br><span class="line">        V createdValue = create(key);</span><br><span class="line">        if (createdValue == null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">		// 若是重写了create(key)方法，便将新的数据放入缓存中。</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            createCount++;</span><br><span class="line">            mapValue = map.put(key, createdValue);</span><br><span class="line">            if (mapValue != null) &#123;</span><br><span class="line">                // There was a conflict so undo that last put 有冲突撤销之前设置的值</span><br><span class="line">                map.put(key, mapValue);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                size += safeSizeOf(key, createdValue);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (mapValue != null) &#123;</span><br><span class="line">            entryRemoved(false, key, createdValue, mapValue);</span><br><span class="line">            return mapValue;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            trimToSize(maxSize);</span><br><span class="line">            return createdValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Caches &#123;@code value&#125; for &#123;@code key&#125;. The value is moved to the head of</span><br><span class="line">     * the queue.</span><br><span class="line">     * 向缓存队列中添加数据，并将数据移动到队列头部</span><br><span class="line">     * @return the previous value mapped by &#123;@code key&#125;.</span><br><span class="line">     */</span><br><span class="line">    public final V put(K key, V value) &#123;</span><br><span class="line">        if (key == null || value == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;key == null || value == null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        V previous;</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            putCount++;</span><br><span class="line">            // safeSizeOf(Key,value);该方法返回的是1，也就是将缓存的个数加1.</span><br><span class="line">            // 当缓存的是图片的时候，这个size应该表示图片占用的内存的大小，</span><br><span class="line">            // 所以应该重写里面调用sizeOf(key,value)的方法</span><br><span class="line">            size += safeSizeOf(key, value);</span><br><span class="line">            // 将新创建的元素加入缓存队列，并在添加成功后返回这个元素</span><br><span class="line">            previous = map.put(key, value);</span><br><span class="line">            if (previous != null) &#123;</span><br><span class="line">            	// 如果换回为null,则说明缓存失败，在已用的缓存大小中减去改元素大小</span><br><span class="line">                size -= safeSizeOf(key, previous);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (previous != null) &#123;</span><br><span class="line">            entryRemoved(false, key, previous, value);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        trimToSize(maxSize);</span><br><span class="line">        return previous;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Remove the eldest entries until the total of remaining entries is at or</span><br><span class="line">     * below the requested size.</span><br><span class="line">     * 修改缓存大小，是已用的缓存不大于设置的缓存最大值</span><br><span class="line">     * @param maxSize the maximum size of the cache before returning. May be -1</span><br><span class="line">     *            to evict even 0-sized elements.</span><br><span class="line">     */</span><br><span class="line">    public void trimToSize(int maxSize) &#123;</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            K key;</span><br><span class="line">            V value;</span><br><span class="line">            synchronized (this) &#123;</span><br><span class="line">                if (size &lt; 0 || (map.isEmpty() &amp;&amp; size != 0)) &#123;</span><br><span class="line">                    throw new IllegalStateException(getClass().getName()</span><br><span class="line">                            + &quot;.sizeOf() is reporting inconsistent results!&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">				// 已用缓存小于最大缓存，则完成任务退出循环</span><br><span class="line">                if (size &lt;= maxSize || map.isEmpty()) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">				// 否则在缓存队列中先找到最近最少使用的元素，</span><br><span class="line">				// 调用LinkedHashMap的eldest()方法返回最不经常使用的元素。</span><br><span class="line">                Map.Entry&lt;K, V&gt; toEvict = map.entrySet().iterator().next();</span><br><span class="line">                // 删掉改元素减少已使用的缓存空间</span><br><span class="line">                key = toEvict.getKey();</span><br><span class="line">                value = toEvict.getValue();</span><br><span class="line">                map.remove(key);</span><br><span class="line">                size -= safeSizeOf(key, value);</span><br><span class="line">                evictionCount++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            entryRemoved(true, key, value, null);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Removes the entry for &#123;@code key&#125; if it exists.</span><br><span class="line">     * 删除</span><br><span class="line">     * @return the previous value mapped by &#123;@code key&#125;.</span><br><span class="line">     */</span><br><span class="line">    public final V remove(K key) &#123;</span><br><span class="line">        if (key == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;key == null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        V previous;</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            previous = map.remove(key);</span><br><span class="line">            if (previous != null) &#123;</span><br><span class="line">                size -= safeSizeOf(key, previous);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (previous != null) &#123;</span><br><span class="line">            entryRemoved(false, key, previous, null);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return previous;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Called for entries that have been evicted or removed. This method is</span><br><span class="line">     * invoked when a value is evicted to make space, removed by a call to</span><br><span class="line">     * &#123;@link #remove&#125;, or replaced by a call to &#123;@link #put&#125;. The default</span><br><span class="line">     * implementation does nothing.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;The method is called without synchronization: other threads may</span><br><span class="line">     * access the cache while this method is executing.</span><br><span class="line">     *</span><br><span class="line">     * @param evicted true if the entry is being removed to make space, false</span><br><span class="line">     *     if the removal was caused by a &#123;@link #put&#125; or &#123;@link #remove&#125;.</span><br><span class="line">     * @param newValue the new value for &#123;@code key&#125;, if it exists. If non-null,</span><br><span class="line">     *     this removal was caused by a &#123;@link #put&#125;. Otherwise it was caused by</span><br><span class="line">     *     an eviction or a &#123;@link #remove&#125;.</span><br><span class="line">     * 默认为空方法，有需要才会自己实现，evicted如果是true,则表示这个元素因为空间不够而被自动清理了，所以</span><br><span class="line">     * 可以在这个地方队被清理的元素进行再次缓存</span><br><span class="line">     */</span><br><span class="line">    protected void entryRemoved(boolean evicted, K key, V oldValue, V newValue) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Called after a cache miss to compute a value for the corresponding key.</span><br><span class="line">     * Returns the computed value or null if no value can be computed. The</span><br><span class="line">     * default implementation returns null.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;The method is called without synchronization: other threads may</span><br><span class="line">     * access the cache while this method is executing.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;If a value for &#123;@code key&#125; exists in the cache when this method</span><br><span class="line">     * returns, the created value will be released with &#123;@link #entryRemoved&#125;</span><br><span class="line">     * and discarded. This can occur when multiple threads request the same key</span><br><span class="line">     * at the same time (causing multiple values to be created), or when one</span><br><span class="line">     * thread calls &#123;@link #put&#125; while another is creating a value for the same</span><br><span class="line">     * key.</span><br><span class="line">     */</span><br><span class="line">    protected V create(K key) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private int safeSizeOf(K key, V value) &#123;</span><br><span class="line">        int result = sizeOf(key, value);</span><br><span class="line">        if (result &lt; 0) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;Negative size: &quot; + key + &quot;=&quot; + value);</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the size of the entry for &#123;@code key&#125; and &#123;@code value&#125; in</span><br><span class="line">     * user-defined units.  The default implementation returns 1 so that size</span><br><span class="line">     * is the number of entries and max size is the maximum number of entries.</span><br><span class="line">     * 用来定义已用缓存的数量算法，默认是返回数量</span><br><span class="line">     * &lt;p&gt;An entry&apos;s size must not change while it is in the cache.</span><br><span class="line">     */</span><br><span class="line">    protected int sizeOf(K key, V value) &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Clear the cache, calling &#123;@link #entryRemoved&#125; on each removed entry.</span><br><span class="line">     * 清空所有缓存</span><br><span class="line">     */</span><br><span class="line">    public final void evictAll() &#123;</span><br><span class="line">        trimToSize(-1); // -1 will evict 0-sized elements</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * For caches that do not override &#123;@link #sizeOf&#125;, this returns the number</span><br><span class="line">     * of entries in the cache. For all other caches, this returns the sum of</span><br><span class="line">     * the sizes of the entries in this cache.</span><br><span class="line">     * 不可重写，返回的值是缓存的条目数</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int size() &#123;</span><br><span class="line">        return size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * For caches that do not override &#123;@link #sizeOf&#125;, this returns the maximum</span><br><span class="line">     * number of entries in the cache. For all other caches, this returns the</span><br><span class="line">     * maximum sum of the sizes of the entries in this cache.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int maxSize() &#123;</span><br><span class="line">        return maxSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the number of times &#123;@link #get&#125; returned a value that was</span><br><span class="line">     * already present in the cache.</span><br><span class="line">     * 已缓存的value的数目</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int hitCount() &#123;</span><br><span class="line">        return hitCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the number of times &#123;@link #get&#125; returned null or required a new</span><br><span class="line">     * value to be created.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int missCount() &#123;</span><br><span class="line">        return missCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the number of times &#123;@link #create(Object)&#125; returned a value.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int createCount() &#123;</span><br><span class="line">        return createCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the number of times &#123;@link #put&#125; was called.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int putCount() &#123;</span><br><span class="line">        return putCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the number of values that have been evicted.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final int evictionCount() &#123;</span><br><span class="line">        return evictionCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns a copy of the current contents of the cache, ordered from least</span><br><span class="line">     * recently accessed to most recently accessed.</span><br><span class="line">     */</span><br><span class="line">    public synchronized final Map&lt;K, V&gt; snapshot() &#123;</span><br><span class="line">        return new LinkedHashMap&lt;K, V&gt;(map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override public synchronized final String toString() &#123;</span><br><span class="line">        int accesses = hitCount + missCount;</span><br><span class="line">        int hitPercent = accesses != 0 ? (100 * hitCount / accesses) : 0;</span><br><span class="line">        return String.format(Locale.US, &quot;LruCache[maxSize=%d,hits=%d,misses=%d,hitRate=%d%%]&quot;,</span><br><span class="line">                maxSize, hitCount, missCount, hitPercent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><blockquote>
+<p>LRUCache使用LinkedHashMap来存储缓存，LinkedHashMap内部有排序功能，当其构造方法第三个参数为true时，数据在被访问的时候就会排序，该排序的结果就是把最近访问的数据放在放在集合的最后面。所以要缓存不够是就会从前面开始删除。</p>
+</blockquote>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Constructs an empty &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance with the</span><br><span class="line">     * specified initial capacity, load factor and ordering mode.</span><br><span class="line">     *</span><br><span class="line">     * @param  initialCapacity the initial capacity</span><br><span class="line">     * @param  loadFactor      the load factor</span><br><span class="line">     * @param  accessOrder     the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for</span><br><span class="line">     *         access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order</span><br><span class="line">     * @throws IllegalArgumentException if the initial capacity is negative</span><br><span class="line">     *         or the load factor is nonpositive</span><br><span class="line">     */</span><br><span class="line">    public LinkedHashMap(int initialCapacity,</span><br><span class="line">                         float loadFactor,</span><br><span class="line">                         boolean accessOrder) &#123;</span><br><span class="line">        super(initialCapacity, loadFactor);</span><br><span class="line">        this.accessOrder = accessOrder;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Entity的定义"><a href="#Entity的定义" class="headerlink" title="Entity的定义"></a>Entity的定义</h3><p>LinkedHashMap内部是使用双向循环链表来存储数据，也就是每一个元素都持有他上一个元素的地址和下一个元素的地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * LinkedHashMap entry.</span><br><span class="line">    */</span><br><span class="line">   private static class LinkedHashMapEntry&lt;K,V&gt; extends HashMapEntry&lt;K,V&gt; &#123;</span><br><span class="line">       // These fields comprise the doubly linked list used for iteration.</span><br><span class="line">       LinkedHashMapEntry&lt;K,V&gt; before, after;</span><br><span class="line"></span><br><span class="line">       LinkedHashMapEntry(int hash, K key, V value, HashMapEntry&lt;K,V&gt; next) &#123;</span><br><span class="line">           super(hash, key, value, next);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       /**</span><br><span class="line">        * 从链表中删除这个元素</span><br><span class="line">        */</span><br><span class="line">       private void remove() &#123;</span><br><span class="line">           before.after = after;</span><br><span class="line">           after.before = before;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       /**</span><br><span class="line">        * Inserts this entry before the specified existing entry in the list.</span><br><span class="line">        */</span><br><span class="line">       private void addBefore(LinkedHashMapEntry&lt;K,V&gt; existingEntry) &#123;</span><br><span class="line">           after  = existingEntry;</span><br><span class="line">           before = existingEntry.before;</span><br><span class="line">           before.after = this;</span><br><span class="line">           after.before = this;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       /**</span><br><span class="line">        * 当集合的get方法被调用时，会调用这个方法。</span><br><span class="line">        * 如果accessOrder为true，就把这个元素放在集合的最末端。</span><br><span class="line">        */</span><br><span class="line">       void recordAccess(HashMap&lt;K,V&gt; m) &#123;</span><br><span class="line">           LinkedHashMap&lt;K,V&gt; lm = (LinkedHashMap&lt;K,V&gt;)m;</span><br><span class="line">           if (lm.accessOrder) &#123;</span><br><span class="line">               lm.modCount++;</span><br><span class="line">               remove();</span><br><span class="line">               addBefore(lm.header);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       void recordRemoval(HashMap&lt;K,V&gt; m) &#123;</span><br><span class="line">           remove();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="get方法排序过程"><a href="#get方法排序过程" class="headerlink" title="get方法排序过程"></a>get方法排序过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public V get(Object key) &#123;</span><br><span class="line">        LinkedHashMapEntry&lt;K,V&gt; e = (LinkedHashMapEntry&lt;K,V&gt;)getEntry(key);</span><br><span class="line">        if (e == null)</span><br><span class="line">            return null;</span><br><span class="line">        e.recordAccess(this);</span><br><span class="line">        return e.value;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/LinkedHashMap%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8" alt="LinkedHashMap双向循环链表"></p>
+<ul>
+<li>每一个元素都持有他上一个元素的地址和下一个元素的地址，对于最后一个元素它会和header相互持有也就是header会持有最后一个元素地址作为before，而最后一个元素会持有header地址作为after。</li>
+</ul>
+<h3 id="recordAccess（this）方法，this就是这个LinkedHashMap"><a href="#recordAccess（this）方法，this就是这个LinkedHashMap" class="headerlink" title="recordAccess（this）方法，this就是这个LinkedHashMap"></a>recordAccess（this）方法，this就是这个LinkedHashMap</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void recordAccess(HashMap&lt;K,V&gt; m) &#123;</span><br><span class="line">            LinkedHashMap&lt;K,V&gt; lm = (LinkedHashMap&lt;K,V&gt;)m;</span><br><span class="line">            if (lm.accessOrder) &#123;</span><br><span class="line">                lm.modCount++;</span><br><span class="line">                remove();</span><br><span class="line">                addBefore(lm.header);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 调用remove方法，把自己从链表中移除：</span><br><span class="line">        private void remove() &#123;</span><br><span class="line">            before.after = after;</span><br><span class="line">            after.before = before;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">       // addBefore(lm.header)方法，把自己添加到链表的结尾</span><br><span class="line">        private void addBefore(LinkedHashMapEntry&lt;K,V&gt; existingEntry) &#123;</span><br><span class="line">            after  = existingEntry;</span><br><span class="line">            before = existingEntry.before;</span><br><span class="line">            before.after = this;</span><br><span class="line">            after.before = this;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/LinkedHashMap%E7%9A%84remove%E8%BF%87%E7%A8%8B" alt="LinkedHashMap的remove过程"></p>
+<h3 id="获取最该清楚的常用元素"><a href="#获取最该清楚的常用元素" class="headerlink" title="获取最该清楚的常用元素"></a>获取最该清楚的常用元素</h3><ul>
+<li><p>eldest()方法，提供的就是最近最少使用的元素：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Map.Entry&lt;K, V&gt; eldest() &#123;</span><br><span class="line">        Entry&lt;K, V&gt; eldest = header.after;</span><br><span class="line">        return eldest != header ? eldest : null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="LruCache和LinkedHashMap结合实现缓存"><a href="#LruCache和LinkedHashMap结合实现缓存" class="headerlink" title="LruCache和LinkedHashMap结合实现缓存"></a>LruCache和LinkedHashMap结合实现缓存</h2><ul>
+<li><p>LinkedHashMap第三个参数为true时，每次访问LinkedHashMap的数据，LinkedHashMap都回去进行排序，将最近访问的放在链表的末尾。</p>
+<ul>
+<li>LruCache的put方法调用了LinkedHashMap的put来存储数据，自己进行了对缓存空间的计算。LinkedHashMap的put方法也会进行排序。</li>
+<li>LruCache的get方法调用了LinkedHashMap的get来获取数据，由于LinkedHashMap构造方法的第三个参数为true,因此get也会触发LinkedHashMap的排序。</li>
+</ul>
+</li>
+<li><p>trimToSize(int maxSize)</p>
+<p>trimToSize(int maxSize)是LruCache的核心方法了，get和put都可能会执行这个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public void trimToSize(int maxSize) &#123;</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            K key;</span><br><span class="line">            V value;</span><br><span class="line">            synchronized (this) &#123;</span><br><span class="line">                if (size &lt; 0 || (map.isEmpty() &amp;&amp; size != 0)) &#123;</span><br><span class="line">                    throw new IllegalStateException(getClass().getName()</span><br><span class="line">                            + &quot;.sizeOf() is reporting inconsistent results!&quot;);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (size &lt;= maxSize) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                Map.Entry&lt;K, V&gt; toEvict = map.eldest();</span><br><span class="line">                if (toEvict == null) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                key = toEvict.getKey();</span><br><span class="line">                value = toEvict.getValue();</span><br><span class="line">                map.remove(key);</span><br><span class="line">                size -= safeSizeOf(key, value);</span><br><span class="line">                evictionCount++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            entryRemoved(true, key, value, null);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="使用LruCache来缓存Bitmap"><a href="#使用LruCache来缓存Bitmap" class="headerlink" title="使用LruCache来缓存Bitmap"></a>使用LruCache来缓存Bitmap</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">LruCache&lt;String, Bitmap&gt; mLruCache;</span><br><span class="line">        //获取手机最大内存 单位 kb</span><br><span class="line">        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);</span><br><span class="line">        //一般都将1/8设为LruCache的最大缓存</span><br><span class="line">        int cacheSize = maxMemory / 8;</span><br><span class="line">        mLruCache = new LruCache&lt;String, Bitmap&gt;(maxMemory / 8) &#123;</span><br><span class="line"></span><br><span class="line">            /**</span><br><span class="line">             * 这个方法从源码中看出来是设置已用缓存的计算方式的。</span><br><span class="line">             * 默认返回的值是1，也就是没缓存一张图片就将已用缓存大小加1.</span><br><span class="line">             * 缓存图片看的是占用的内存的大小，每张图片的占用内存也是不一样的，一次不能这样算。</span><br><span class="line">             * 因此要重写这个方法，手动将这里改为本次缓存的图片的大小。</span><br><span class="line">             */</span><br><span class="line">            @Override</span><br><span class="line">            protected int sizeOf(String key, Bitmap value) &#123;</span><br><span class="line">                return value.getByteCount() / 1024;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        //加入缓存</span><br><span class="line">        mLruCache.put(&quot;key&quot;, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));</span><br><span class="line">        //从缓存中读取</span><br><span class="line">        Bitmap bitmap = mLruCache.get(&quot;key&quot;);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+    
+       <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------------The End-------------</div>
+    
+</div>
+      </div>
+    
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" <i class="fa fa-tag"></i>Android基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/04/有关MVP的设计/" rel="prev" title="有关MVP的设计">
+                有关MVP的设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-hoofoo-share-title">分享到：</div>
+<div class="-hoofoo-share-buttons">
+    <div class="-mob-share-weibo -hoofoo-share-weibo -hoofoo-share-ui-button"><i class="fa fa-weibo" aria-hidden="true"></i></div>
+    <div class="-mob-share-weixin -hoofoo-share-weixin -hoofoo-share-ui-button"><i class="fa fa-weixin" aria-hidden="true"></i></div>
+    <div class="-mob-share-qq -hoofoo-share-qq -hoofoo-share-ui-button"><i class="fa fa-qq" aria-hidden="true"></i></div>
+    <div class="-mob-share-twitter -hoofoo-share-twitter -hoofoo-share-ui-button"><i class="fa fa-twitter" aria-hidden="true"></i></div>
+    <div class="-hoofoo-share-more -hoofoo-share-ui-button -mob-share-open"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></div>
+</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-weixin"><p>微信</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+        <li class="-mob-share-renren"><p>人人网</p></li>
+        <li class="-mob-share-kaixin"><p>开心网</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-youdao"><p>有道云笔记</p></li>
+        <li class="-mob-share-mingdao"><p>明道</p></li>
+        <li class="-mob-share-pengyou"><p>朋友网</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+        <li class="-mob-share-pocket"><p>Pocket</p></li>
+        <li class="-mob-share-google"><p>Google+</p></li>
+        <li class="-mob-share-tumblr"><p>Tumblr</p></li>
+        <li class="-mob-share-instapaper"><p>Instapaper</p></li>
+        <li class="-mob-share-linkedin"><p>Linkedin</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=253a344399ff0"></script>
+<!--MOB SHARE END-->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">作茧自缚</p>
+              <p class="site-description motion-element" itemprop="description">格物致知</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LRUCache源码解析"><span class="nav-number">1.</span> <span class="nav-text">LRUCache源码解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">2.</span> <span class="nav-text">LinkedHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">2.1.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Entity的定义"><span class="nav-number">2.2.</span> <span class="nav-text">Entity的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get方法排序过程"><span class="nav-number">2.3.</span> <span class="nav-text">get方法排序过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#recordAccess（this）方法，this就是这个LinkedHashMap"><span class="nav-number">2.4.</span> <span class="nav-text">recordAccess（this）方法，this就是这个LinkedHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取最该清楚的常用元素"><span class="nav-number">2.5.</span> <span class="nav-text">获取最该清楚的常用元素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LruCache和LinkedHashMap结合实现缓存"><span class="nav-number">3.</span> <span class="nav-text">LruCache和LinkedHashMap结合实现缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用LruCache来缓存Bitmap"><span class="nav-number">4.</span> <span class="nav-text">使用LruCache来缓存Bitmap</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">作茧自缚</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">52k</span>
+  
+</div>
+
+
+  <div class="powered-by">  个人专属</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">博客 </div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+  <a href="https://github.com/xuqinzz"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zhizhi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/02/04/LRUCache原理/';
+          this.page.identifier = '2018/02/04/LRUCache原理/';
+          this.page.title = 'LRUCache原理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zhizhi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+<script type="text/javascript">
+    //微信二维码点击背景关闭
+    $('body').delegate('.-mob-share-weixin-qrcode-bg','click', function(){
+         $(".-mob-share-weixin-qrcode-close").trigger("click");
+    }); 
+</script>
+
+<script type="text/javascript" color="255,132,0" opacity='0.6' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+</body>
+</html>
