@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4.3k
+                  3.8k
                 </span>
               
 
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  16
+                  14
                 </span>
               
             </div>
@@ -442,9 +442,11 @@
       
         
           
-          启动模式
-standard：标准模式，也是系统设置的默认模式。每次启动Activity,不管任务栈中存不存在实例，都会重新创建一个实例。
-singleTop：栈顶复用模式，如果Activity已经存在并位于任务栈的栈顶，那么此Activity不会被创建，同时它的onNewInstent方法会被调用。
+          生命周期
+Activity的状态
+running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。
+pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。
+stopped：当前Activity完全覆盖，不
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -2347,7 +2349,7 @@ measure() 方法被父 View 调用，在 mea
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">67.3k</span>
+    <span title="Site words total count">66.8k</span>
   
 </div>
 
