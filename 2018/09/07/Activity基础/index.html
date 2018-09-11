@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
-<meta property="og:updated_time" content="2018-09-10T15:54:37.352Z">
+<meta property="og:updated_time" content="2018-09-11T15:56:55.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity基础">
 <meta name="twitter:description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。 pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存紧张会被回收。 killed：Ac">
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.8k
+                  4.4k
                 </span>
               
 
@@ -421,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  14
+                  16
                 </span>
               
             </div>
@@ -525,14 +525,33 @@
 </ol>
 </li>
 </ul>
-<h2 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h2><h3 id="standard"><a href="#standard" class="headerlink" title="standard"></a>standard</h3><ul>
-<li>标准模式，也是系统设置的默认模式。每次启动Activity,不管任务栈中存不存在实例，都会重新创建一个实例。</li>
+<h2 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h2><h3 id="启动模式的两种设置方式"><a href="#启动模式的两种设置方式" class="headerlink" title="启动模式的两种设置方式"></a>启动模式的两种设置方式</h3><ol>
+<li>通过AndroidMenifest为Activity指定启动模式。</li>
+<li>通过在Intent设置标志为来为Activity指定启动模式。</li>
+</ol>
+<ul>
+<li><strong>区别：</strong>第二张指定方式优先级高于第一种指定方式，第一种指定方式无法直接为Activity设定FLAG_ACTIVITY_CLEAR_TOP标识，第二张无法为Activity指定singleInstance模式。</li>
 </ul>
-<h3 id="singleTop"><a href="#singleTop" class="headerlink" title="singleTop"></a>singleTop</h3><ul>
-<li>栈顶复用模式，如果Activity已经存在并位于任务栈的栈顶，那么此Activity不会被创建，同时它的onNewInstent方法会被调用。如果Activity实例已经存在但不是位于栈顶，那么该Activity会被重新创建。</li>
+<h3 id="任务栈"><a href="#任务栈" class="headerlink" title="任务栈"></a>任务栈</h3><ul>
+<li>任务栈是一种<strong>后进先出</strong>的栈结构。</li>
+<li>standar启动模式下每次启动Activity都会生成新实例加入返回栈处于栈顶，每按下back键一次就会使栈顶的Activity销毁出栈，直至任务栈清空，当栈中没有任何Activity时，系统就会回收该任务栈。</li>
+<li>只有处于任务栈栈顶的Activity才可以与用户进行交互。</li>
+<li>当推出应用时，必须把所有任务栈中所有Activity清除出栈，任务栈才会被销毁。</li>
+<li>任务栈中的Activity可能并不来自同一App，同时应用中的Activity也可能在不同任务栈中。</li>
 </ul>
-<h3 id="singTask"><a href="#singTask" class="headerlink" title="singTask"></a>singTask</h3><ul>
-<li>栈内复用模式，如果Activity在栈中已经存在，那么该Activity实例上的其它Activity实例全部出栈，使此Activity实例成为栈顶对象，显示到幕前，系统也会回调onNewInstent。</li>
+<h3 id="standard标准模式"><a href="#standard标准模式" class="headerlink" title="standard标准模式"></a>standard标准模式</h3><ul>
+<li>每次启动Activity,不管任务栈中是否存在实例，都会重新创建一个实例。</li>
+<li>Activity标准的启动模式启动会调用onCreat、onStart、onResume方法。</li>
+<li>被启动的Activity会处于启动它的Activity的任务栈中。</li>
+</ul>
+<h3 id="singleTop栈顶复用模式"><a href="#singleTop栈顶复用模式" class="headerlink" title="singleTop栈顶复用模式"></a>singleTop栈顶复用模式</h3><ul>
+<li>如果新的Activity已经存在并位于任务栈的栈顶，那么此Activity不会被创建，同时它的onNewInstent方法会被调用。</li>
+<li>如果新的Activity实例已经存在但不是位于栈顶，那么该Activity会被重新创建。</li>
+</ul>
+<h3 id="singTask栈内复用模式"><a href="#singTask栈内复用模式" class="headerlink" title="singTask栈内复用模式"></a>singTask栈内复用模式</h3><ul>
+<li>单实例模式，在新Activity请求启动后，系统会勋章是否存在新Activity所需的任务栈，如果任务栈不存在，那么系统会创建新Activity所需的任务栈。如果所需的任务栈已经存在，那么会判断栈中是否存在该Activity实例，如果在栈中已经存在该Activity实例，那么该Activity实例上的其它Activity实例全部出栈，使该Activity实例成为栈顶对象，显示到幕前，系统也会回调onNewInstent。如果此栈中该Activity不存在，那么就会创建该Activity实例并把其压入栈中。</li>
+<li>默认状态下所有Activity所需的任务栈的名字都为应用的包名，但是我们可以制定TaskAffinity的属性值来设置目标任务栈。TaskAffinity属性主要和singTask模式或者allowTaskReparenting属性配对使用，在其它清空下没有意义。</li>
+<li>TaskAffinity和allowTaskReparenting结合使用时，如果当A应用启动了B应用的某个ActivityC并且这ActivityC的allowTaskReparenting为true时，那么此当B应用启动时ActivityC会直接从A的任务栈转移到B的任务栈中。此时桌面启动B应用那么打开的会是B应用中的ActivityC，因为ActivityC已经从A应用的任务栈中转移到B应用的任务栈中，所以此时B应用并不会启动主Activity。</li>
 </ul>
 <h3 id="singleInstance"><a href="#singleInstance" class="headerlink" title="singleInstance"></a>singleInstance</h3><ul>
 <li>单实例模式，它会启用一个新的栈结构，将Activity放置于这个新的栈结构中，并保证不再有其他Activity实例进入。singleInstance所标识的Activity，当被启动时，系统会首先判断系统其他栈中是否已经存在此Activity实例，有则直接使用，并且在其所在的Activity栈理论上只有它一个Activity。所以启动它的Activity与它并不在一个Task中，因此需要特别注意Back的问题，因为按下back ，singleInstance所创建的唯一实例就会销毁并且该栈中不存在其他Activity，自然回到了打开改Activity的Activity。 一般表示为：task1 A-&gt;task2 B。singleInstance与singleTask主要区别在于是系统范围内的唯一实例还是当前Activity栈中唯一实例。</li>
@@ -848,7 +867,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">1.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity的状态"><span class="nav-number">1.1.</span> <span class="nav-text">Activity的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正常情况下的生命周期"><span class="nav-number">1.2.</span> <span class="nav-text">正常情况下的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常情况下的生命周期"><span class="nav-number">1.3.</span> <span class="nav-text">异常情况下的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理生命周期"><span class="nav-number">1.4.</span> <span class="nav-text">管理生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动模式"><span class="nav-number">2.</span> <span class="nav-text">启动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#standard"><span class="nav-number">2.1.</span> <span class="nav-text">standard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleTop"><span class="nav-number">2.2.</span> <span class="nav-text">singleTop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singTask"><span class="nav-number">2.3.</span> <span class="nav-text">singTask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleInstance"><span class="nav-number">2.4.</span> <span class="nav-text">singleInstance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scheme跳转协议"><span class="nav-number">3.</span> <span class="nav-text">scheme跳转协议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">1.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity的状态"><span class="nav-number">1.1.</span> <span class="nav-text">Activity的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正常情况下的生命周期"><span class="nav-number">1.2.</span> <span class="nav-text">正常情况下的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常情况下的生命周期"><span class="nav-number">1.3.</span> <span class="nav-text">异常情况下的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理生命周期"><span class="nav-number">1.4.</span> <span class="nav-text">管理生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动模式"><span class="nav-number">2.</span> <span class="nav-text">启动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动模式的两种设置方式"><span class="nav-number">2.1.</span> <span class="nav-text">启动模式的两种设置方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务栈"><span class="nav-number">2.2.</span> <span class="nav-text">任务栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#standard标准模式"><span class="nav-number">2.3.</span> <span class="nav-text">standard标准模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleTop栈顶复用模式"><span class="nav-number">2.4.</span> <span class="nav-text">singleTop栈顶复用模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singTask栈内复用模式"><span class="nav-number">2.5.</span> <span class="nav-text">singTask栈内复用模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleInstance"><span class="nav-number">2.6.</span> <span class="nav-text">singleInstance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scheme跳转协议"><span class="nav-number">3.</span> <span class="nav-text">scheme跳转协议</span></a></li></ol></div>
             
 
           </div>
@@ -882,7 +901,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">66.8k</span>
+    <span title="Site words total count">67.4k</span>
   
 </div>
 
