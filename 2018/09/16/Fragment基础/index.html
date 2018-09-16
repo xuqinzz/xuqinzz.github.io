@@ -70,7 +70,7 @@
 
 
 
-  <meta name="keywords" content="MVP," />
+  <meta name="keywords" content="Android基础," />
 
 
 
@@ -81,18 +81,21 @@
 
 
 
-<meta name="description" content="BasePresenter中BaseView的绑定和解绑：由于Presenter要获取View对象调用View中方法，所以需要对View进行绑定，当View销毁时因为View的对象为null，需要Presenter对View进行解绑，不然Presenter会持有View的引用导致内存泄漏。 代理模式 抽象角色：声明真实对象和代理对象的共同接口； 代理角色：代理对象角色内部含有对真实对象的引用，从">
-<meta name="keywords" content="MVP">
+<meta name="description" content="第五组件Fragment Fragment 表示 Activity 中的行为或用户界面部分。可以将多个片段组合在一个 Activity 中来构建多窗口 UI，以及在多个 Activity 中重复使用某个片段。可以将片段视为 Activity 的模块化组成部分，它具有自己的生命周期，能接收自己的输入事件，并且可以在 Activity 运行时添加或移除片段（类似可以在不同 Activity 中重复使用">
+<meta name="keywords" content="Android基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="有关MVP的设计">
-<meta property="og:url" content="http://yoursite.com/2018/02/04/有关MVP的设计/index.html">
+<meta property="og:title" content="Fragment基础">
+<meta property="og:url" content="http://yoursite.com/2018/09/16/Fragment基础/index.html">
 <meta property="og:site_name" content="跬步">
-<meta property="og:description" content="BasePresenter中BaseView的绑定和解绑：由于Presenter要获取View对象调用View中方法，所以需要对View进行绑定，当View销毁时因为View的对象为null，需要Presenter对View进行解绑，不然Presenter会持有View的引用导致内存泄漏。 代理模式 抽象角色：声明真实对象和代理对象的共同接口； 代理角色：代理对象角色内部含有对真实对象的引用，从">
+<meta property="og:description" content="第五组件Fragment Fragment 表示 Activity 中的行为或用户界面部分。可以将多个片段组合在一个 Activity 中来构建多窗口 UI，以及在多个 Activity 中重复使用某个片段。可以将片段视为 Activity 的模块化组成部分，它具有自己的生命周期，能接收自己的输入事件，并且可以在 Activity 运行时添加或移除片段（类似可以在不同 Activity 中重复使用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-09T15:06:21.032Z">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
+<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8EActivityd%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E5%85%B3%E8%81%94">
+<meta property="og:updated_time" content="2018-09-16T12:17:45.782Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="有关MVP的设计">
-<meta name="twitter:description" content="BasePresenter中BaseView的绑定和解绑：由于Presenter要获取View对象调用View中方法，所以需要对View进行绑定，当View销毁时因为View的对象为null，需要Presenter对View进行解绑，不然Presenter会持有View的引用导致内存泄漏。 代理模式 抽象角色：声明真实对象和代理对象的共同接口； 代理角色：代理对象角色内部含有对真实对象的引用，从">
+<meta name="twitter:title" content="Fragment基础">
+<meta name="twitter:description" content="第五组件Fragment Fragment 表示 Activity 中的行为或用户界面部分。可以将多个片段组合在一个 Activity 中来构建多窗口 UI，以及在多个 Activity 中重复使用某个片段。可以将片段视为 Activity 的模块化组成部分，它具有自己的生命周期，能接收自己的输入事件，并且可以在 Activity 运行时添加或移除片段（类似可以在不同 Activity 中重复使用">
+<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/02/04/有关MVP的设计/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/16/Fragment基础/"/>
 
 
 
@@ -142,7 +145,7 @@
         border-left-color: #ffffff;    /*左边框颜色*/
     }
 </style>
-  <title>有关MVP的设计 | 跬步</title>
+  <title>Fragment基础 | 跬步</title>
   
 
 
@@ -308,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/04/有关MVP的设计/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/Fragment基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="作茧自缚">
@@ -325,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">有关MVP的设计</h1>
+          <h1 class="post-title" itemprop="name headline">Fragment基础</h1>
         
 
         <div class="post-meta">
@@ -337,8 +340,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-04T22:51:44+08:00">
-                2018-02-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-16T20:07:11+08:00">
+                2018-09-16
               </time>
             
 
@@ -360,8 +363,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android架构/" itemprop="url" rel="index">
-                    <span itemprop="name">Android架构</span>
+                  <a href="/categories/Android基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Android基础</span>
                   </a>
                 </span>
 
@@ -378,9 +381,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/04/有关MVP的设计/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/16/Fragment基础/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/04/有关MVP的设计/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/16/Fragment基础/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -402,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  431
+                  775
                 </span>
               
 
@@ -418,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
@@ -439,30 +442,56 @@
       
 
       
-        <ol>
-<li>BasePresenter中BaseView的绑定和解绑：由于Presenter要获取View对象调用View中方法，所以需要对View进行绑定，当View销毁时因为View的对象为null，需要Presenter对View进行解绑，不然Presenter会持有View的引用导致内存泄漏。</li>
-<li>代理模式<ul>
-<li><strong>抽象角色</strong>：声明真实对象和代理对象的共同接口；</li>
-<li><strong>代理角色</strong>：代理对象角色内部含有对真实对象的引用，从而可以操作真实对象，同时代理对象提供与真实对象相同的接口以便在任何时刻都能代替真实对象。同时，代理对象可以在执行真实对象操作时，附加其他的操作，相当于对真实对象进行封装。</li>
-<li><strong>真实角色</strong>：代理角色所代表的真实对象，是我们最终要引用的对象。</li>
+        <h2 id="第五组件Fragment"><a href="#第五组件Fragment" class="headerlink" title="第五组件Fragment"></a>第五组件Fragment</h2><blockquote>
+<p><code>Fragment</code> 表示 <code>Activity</code> 中的行为或用户界面部分。可以将多个片段组合在一个 Activity 中来构建多窗口 UI，以及在多个 Activity 中重复使用某个片段。可以将片段视为 Activity 的模块化组成部分，它具有自己的生命周期，能接收自己的输入事件，并且可以在 Activity 运行时添加或移除片段（类似可以在不同 Activity 中重复使用的“子 Activity”）。</p>
+</blockquote>
+<h2 id="Fragment两种加载方式"><a href="#Fragment两种加载方式" class="headerlink" title="Fragment两种加载方式"></a>Fragment两种加载方式</h2><h3 id="静态加载"><a href="#静态加载" class="headerlink" title="静态加载"></a>静态加载</h3><ol>
+<li>创建继承Fragment的子类并生成相应布局文件。</li>
+<li>在需加载Fragment的布局文件中声明fragment控件，指定android:name为刚刚创建的Fragment(Fragment必须用id或tag作为唯一标识)。</li>
+</ol>
+<h3 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h3><ul>
+<li><p>Fragment事务：对Fragment进行添加、移除、替换或执行其它动作，提交给Activity的每一个变化。</p>
+</li>
+<li><p>FragmentManage：管理Fragment。</p>
+</li>
+<li><p>通过FragmentManager.beginTransaction()我们可以开始一个事务。在事务中，我们可以对Fragment进行的操作以及对应的方法如下：</p>
+<ul>
+<li>添加：add()</li>
+<li>移除：remove()</li>
+<li>替换：replace()</li>
+<li>提交事务：commit()</li>
+<li>还有attach()、detach()、hide()、addToBackStack()等方法。</li>
 </ul>
 </li>
-<li>代理模式在MVP设计中的体现<ol>
-<li>第一重代理: 绑定与解绑的代理（代理角色ProxyMvpCallback为真实角色BaseActivity实现绑定与解绑功能）<ul>
-<li>抽象角色：MvpCallBack，创建与设置BasePresenter和BaseView的接口。</li>
-<li>代理角色：ProxyMvpCallback</li>
-<li>真实角色：BaseActivity</li>
-</ul>
+<li><p>加载方法</p>
+<ol>
+<li><p>获取Fragment管理器开始事务；</p>
 </li>
-<li>第二重代理：Activity生命周期的代理（代理对象BaseActivity为真实对象抽象角色MvpActivityDelegate实现Activity的生命周期方法）<ul>
-<li>抽象角色：MvpActivityDelegate 即代理Activity的生命周期</li>
-<li>代理角色：BaseActivity为代理角色内部在Activity生命周期中调用了真实角色的MvpActivityDelegateImpl的生命周期方法。</li>
-<li>真实角色：MvpActivityDelegateImpl，实现了Activity的生命周期。</li>
-</ul>
+<li><p>替换Fragment，将替换事务保存到返回栈，以便用户能够通过按<em>返回</em>按钮撤消事务并回退到上一片段；</p>
 </li>
-<li>第一重代理与第二重代理相结合即是双重代理：代理对象ProxyMvpCallback为真实对象MvpActivityDelegate在生命周期方法中实现绑定与解绑功能</li>
+<li><p>提交commi()方法；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Fragment newFragment = new ExampleFragment();</span><br><span class="line">FragmentTransaction transaction = getFragmentManager().beginTransaction();</span><br><span class="line"></span><br><span class="line">transaction.replace(R.id.fragment_container, newFragment);</span><br><span class="line">transaction.addToBackStack(null);</span><br><span class="line"></span><br><span class="line">transaction.commit();</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 </li>
+</ul>
+<h2 id="FragmentPagerAdapter与FragmentStatePagerAdapter"><a href="#FragmentPagerAdapter与FragmentStatePagerAdapter" class="headerlink" title="FragmentPagerAdapter与FragmentStatePagerAdapter"></a>FragmentPagerAdapter与FragmentStatePagerAdapter</h2><blockquote>
+<p>FragmentPagerAdapter适用于页面较少的的情况，FragmentStatePagerAdapter适用于页面较多的情况。</p>
+</blockquote>
+<ul>
+<li><p><strong>FragmentPagerAdapter：</strong>destroyItem调用detach方法，它并不是真正的内存回收只是把Fragment的UI和Activity的UI脱离开来。<strong>该类内的每一个生成的 Fragment 都将保存在内存之中</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void destroyItem(ViewGroup container, int position, Object object) &#123;</span><br><span class="line">	if (mCurTransaction == null) &#123;</span><br><span class="line">		mCurTransaction = mFragmentManager.beginTransaction();</span><br><span class="line">	&#125;</span><br><span class="line">	if (DEBUG) Log.v(TAG, &quot;Detaching item #&quot; + getItemId(position) + &quot;: f=&quot; + object + &quot; v=&quot; + 			((Fragment)object).getView());</span><br><span class="line">		mCurTransaction.detach((Fragment)object);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>FragmentStatepagerAdapter：</strong>在destroyItem的时调用remove是真正的释放了Fragment的内存，所以更加节省内存。所以说在每次切换ViewPager的时候是真正回收内存的，该 PagerAdapter 的实现将只保留当前页面，当页面离开视线后，就会被销毁，释放其资源；而在页面需要显示时，生成新的页面)。FragmentStatePagerAdapter在销毁Fragment时会调用onSaveInstanceState方法保存一些数据信息，然后下一次创建Fragment时会将这些数据读取出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void destroyItem(ViewGroup container, int position, Object object) &#123;</span><br><span class="line">	Fragment fragment = (Fragment) object;</span><br><span class="line"></span><br><span class="line">	if (mCurTransaction == null) &#123;</span><br><span class="line">		mCurTransaction = mFragmentManager.beginTransaction();</span><br><span class="line">	&#125;</span><br><span class="line">	if (DEBUG) Log.v(TAG, &quot;Removing item #&quot; + position + &quot;: f=&quot; + object+ &quot; v=&quot; + 					((Fragment)object).getView());</span><br><span class="line">		while (mSavedState.size() &lt;= position) &#123;</span><br><span class="line">            mSavedState.add(null);</span><br><span class="line">        &#125;</span><br><span class="line">        mSavedState.set(position, fragment.isAdded()</span><br><span class="line">                ? mFragmentManager.saveFragmentInstanceState(fragment) : null);</span><br><span class="line">        mFragments.set(position, null);</span><br><span class="line"></span><br><span class="line">        mCurTransaction.remove(fragment);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Fragment生命周期"><a href="#Fragment生命周期" class="headerlink" title="Fragment生命周期"></a>Fragment生命周期</h2><h3 id="Fragment的生命周期图"><a href="#Fragment的生命周期图" class="headerlink" title="Fragment的生命周期图"></a>Fragment的生命周期图</h3><p><img src="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" alt="Fragment生命周期"></p>
+<h3 id="Fragment与Activity的生命周期关系图"><a href="#Fragment与Activity的生命周期关系图" class="headerlink" title="Fragment与Activity的生命周期关系图"></a>Fragment与Activity的生命周期关系图</h3><p><img src="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8EActivityd%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E5%85%B3%E8%81%94" alt="Fragment生命周期与Activityd生命周期的关联"></p>
+<h2 id="Fragment通信"><a href="#Fragment通信" class="headerlink" title="Fragment通信"></a>Fragment通信</h2><ol>
+<li>在Fragment中通过getActivity()获得Activity实例然后调用Activity的方法。</li>
+<li>在Activity中调用Fragment方法的接口回调。</li>
+<li>在Fragment中通过getActivity()获取到Activity的实例，然后通过该实例调用findFragmentById()获取到其它Fragment的实例，最后调用其它Fragment的方法。</li>
 </ol>
 
       
@@ -489,7 +518,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/MVP/" <i class="fa fa-tag"></i>MVP</a>
+            <a href="/tags/Android基础/" <i class="fa fa-tag"></i>Android基础</a>
           
         </div>
       
@@ -502,15 +531,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/09/07/Activity基础/" rel="next" title="Activity基础">
+                <i class="fa fa-chevron-left"></i> Activity基础
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/04/LRUCache原理/" rel="prev" title="LRUCache原理">
-                LRUCache原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -608,8 +637,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -669,6 +707,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第五组件Fragment"><span class="nav-number">1.</span> <span class="nav-text">第五组件Fragment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fragment两种加载方式"><span class="nav-number">2.</span> <span class="nav-text">Fragment两种加载方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态加载"><span class="nav-number">2.1.</span> <span class="nav-text">静态加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态加载"><span class="nav-number">2.2.</span> <span class="nav-text">动态加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FragmentPagerAdapter与FragmentStatePagerAdapter"><span class="nav-number">3.</span> <span class="nav-text">FragmentPagerAdapter与FragmentStatePagerAdapter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fragment生命周期"><span class="nav-number">4.</span> <span class="nav-text">Fragment生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fragment的生命周期图"><span class="nav-number">4.1.</span> <span class="nav-text">Fragment的生命周期图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fragment与Activity的生命周期关系图"><span class="nav-number">4.2.</span> <span class="nav-text">Fragment与Activity的生命周期关系图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fragment通信"><span class="nav-number">5.</span> <span class="nav-text">Fragment通信</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -843,9 +897,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/02/04/有关MVP的设计/';
-          this.page.identifier = '2018/02/04/有关MVP的设计/';
-          this.page.title = '有关MVP的设计';
+          this.page.url = 'http://yoursite.com/2018/09/16/Fragment基础/';
+          this.page.identifier = '2018/09/16/Fragment基础/';
+          this.page.title = 'Fragment基础';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zhizhi.disqus.com/embed.js';
