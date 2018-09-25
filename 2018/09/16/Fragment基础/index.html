@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8EActivityd%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E5%85%B3%E8%81%94">
-<meta property="og:updated_time" content="2018-09-16T12:17:45.782Z">
+<meta property="og:updated_time" content="2018-09-25T16:13:33.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fragment基础">
 <meta name="twitter:description" content="第五组件Fragment Fragment 表示 Activity 中的行为或用户界面部分。可以将多个片段组合在一个 Activity 中来构建多窗口 UI，以及在多个 Activity 中重复使用某个片段。可以将片段视为 Activity 的模块化组成部分，它具有自己的生命周期，能接收自己的输入事件，并且可以在 Activity 运行时添加或移除片段（类似可以在不同 Activity 中重复使用">
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  775
+                  1.1k
                 </span>
               
 
@@ -421,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -487,6 +487,20 @@
 </li>
 </ul>
 <h2 id="Fragment生命周期"><a href="#Fragment生命周期" class="headerlink" title="Fragment生命周期"></a>Fragment生命周期</h2><h3 id="Fragment的生命周期图"><a href="#Fragment的生命周期图" class="headerlink" title="Fragment的生命周期图"></a>Fragment的生命周期图</h3><p><img src="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" alt="Fragment生命周期"></p>
+<ul>
+<li><strong>onActtach()：</strong>当Fragment第一次绑定上下文时调用</li>
+<li><strong>onCreate()：</strong>初始化Fragment，可以通过saveInstanceState获取保存的值。</li>
+<li><strong>onCreateView()：</strong>初始化Fragment布局，加载布局和获取控件通常在次方法呢i完成，但不建议做耗时操作。非图形的片段可以返回null。</li>
+<li><strong>onActivityCreated()：</strong>当Fragment绑定的Activity创建完成并且Fragment的视图已经实例化，在该方法内可以进行与Activity交互的UI操作。</li>
+<li><strong>onStart()：</strong>当Fragment对用户可见时调用</li>
+<li><strong>onResume()：</strong>Fragment对用户可见，处于前台可以响应用户交互动作。</li>
+<li><strong>onPause()：</strong>Fragment处于暂停状态，但依然可见，用户不能与之交互。</li>
+<li><strong>onStop()：</strong>Fragment不可见。</li>
+<li><strong>onDestroyView()：</strong>销毁与Fragment有关的视图，但未与Activity解除绑定，依然可以通过onCreateView方法重新创建视图。通常在ViewPager+Fragment的方式下会调用此方法。</li>
+<li><strong>onDestroy()：</strong>销毁Fragment。通常按Back键退出或者Fragment被回收时调用此方法。</li>
+<li><strong>onDetach()：</strong>解除与Activity的绑定。</li>
+<li><strong>onSaveInstanceState()：</strong>保存当前Fragment的状态。该方法会自动保存Fragment的状态，比如EditText键入的文本，即使Fragment被回收又重新创建，一样能恢复EditText之前键入的文本。</li>
+</ul>
 <h3 id="Fragment与Activity的生命周期关系图"><a href="#Fragment与Activity的生命周期关系图" class="headerlink" title="Fragment与Activity的生命周期关系图"></a>Fragment与Activity的生命周期关系图</h3><p><img src="http://ouv36g1sw.bkt.clouddn.com/Fragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8EActivityd%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E5%85%B3%E8%81%94" alt="Fragment生命周期与Activityd生命周期的关联"></p>
 <h2 id="Fragment通信"><a href="#Fragment通信" class="headerlink" title="Fragment通信"></a>Fragment通信</h2><ol>
 <li>在Fragment中通过getActivity()获得Activity实例然后调用Activity的方法。</li>
@@ -751,7 +765,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">68.2k</span>
+    <span title="Site words total count">68.5k</span>
   
 </div>
 
