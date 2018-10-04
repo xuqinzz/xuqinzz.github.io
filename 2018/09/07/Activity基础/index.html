@@ -81,20 +81,20 @@
 
 
 
-<meta name="description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。 pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存紧张会被回收。 killed：Ac">
+<meta name="description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即当前Activity处于栈顶。 pause：失去焦点。例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，不可与用户交互，但是所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存">
 <meta name="keywords" content="Android基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Activity基础">
 <meta property="og:url" content="http://yoursite.com/2018/09/07/Activity基础/index.html">
 <meta property="og:site_name" content="跬步">
-<meta property="og:description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。 pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存紧张会被回收。 killed：Ac">
+<meta property="og:description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即当前Activity处于栈顶。 pause：失去焦点。例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，不可与用户交互，但是所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
 <meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
-<meta property="og:updated_time" content="2018-09-12T16:11:20.146Z">
+<meta property="og:updated_time" content="2018-10-04T16:12:14.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity基础">
-<meta name="twitter:description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。 pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存紧张会被回收。 killed：Ac">
+<meta name="twitter:description" content="生命周期 Activity的状态 running：处于活动状态，用户可以点击屏幕与之交互，即当前Activity处于栈顶。 pause：失去焦点。例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，不可与用户交互，但是所有的状态信息和成员变量都还在。 stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存">
 <meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">
 
 
@@ -444,8 +444,8 @@
       
         <h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p><img src="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" alt="Activity生命周期"></p>
 <h3 id="Activity的状态"><a href="#Activity的状态" class="headerlink" title="Activity的状态"></a>Activity的状态</h3><ul>
-<li>running：处于活动状态，用户可以点击屏幕与之交互，即处于栈顶的状态。</li>
-<li>pause：失去焦点，例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，所有的状态信息和成员变量都还在。</li>
+<li>running：处于活动状态，用户可以点击屏幕与之交互，即当前Activity处于栈顶。</li>
+<li>pause：失去焦点。例：被非全屏或者透明的Activity占据，当前Activity不处于栈顶但还是可见，不可与用户交互，但是所有的状态信息和成员变量都还在。</li>
 <li>stopped：当前Activity完全覆盖，不再可见，如果内存不紧张那么它的状态信息、成员变量可能还在，如果内存紧张会被回收。</li>
 <li>killed：Activity已经被系统回收，保存的信息和成员变量不存在。</li>
 </ul>
@@ -458,30 +458,30 @@
 </ol>
 </li>
 <li><strong>各生命周期方法概述：</strong><ul>
-<li><strong>onCreate：</strong>Activity在进行创建如加载布局资源、初始化所需的数据、绑定相关View等，正处于创建之中，onCreat始终厚街onStart方法。</li>
+<li><strong>onCreate：</strong>Activity处于创建之中，在进行加载布局资源、初始化所需的数据、绑定相关View等工作，onCreat始终节onStart方法。</li>
 <li><strong>onRestart：</strong>Activity正在重新启动（从不可见到可见），常见的情况为Home键切换到桌面或者跳转到新的Activity导致当前的Activity暂停，之后又重新回到改Activity时。</li>
-<li><strong>onStart：</strong>Activity正在被启动，Activity已经处于可见状态但是还未处于前台无法与用户交互。</li>
-<li><strong>onResume：</strong>Activity已可见并处于前台可与用户交互。</li>
-<li><strong>onPasuse：</strong>Activity正在停止，正常情况下紧跟调用onStop。但是在特殊情况下，快速回到当前Activity那么onResume会被调用。此时可以进行不耗时存储数据、停止动画的操作，否则回影响新Activity的显示，因为当前Activity的onPasuse必须执行完，新Activity的onResume才会执行。</li>
+<li><strong>onStart：</strong>Activity正在启动，Activity已经处于可见状态但是还未处于前台无法与用户交互。</li>
+<li><strong>onResume：</strong>Activity已经可见并可与用户交互（处于前台）。</li>
+<li><strong>onPasuse：</strong>Activity正在停止，正常情况下跟着会调用onStop。但是在特殊情况下，快速回到当前Activity那么onResume会被调用。此时可以进行不耗时存储数据、停止动画的操作，否则回影响新Activity的显示，因为当前Activity的onPasuse必须执行完，新Activity的onResume才会执行。</li>
 <li><strong>onStop：</strong>Activity处于不可见且不可交互状态即将停止（如果新的Activity是透明主题那么不会调用onStop），做一些较为重量级的回收工作，但是同样不能太过耗时。</li>
 <li><strong>onStop：</strong>Activity即将销毁，可以在此做回收以及资源释放。</li>
 </ul>
 </li>
 <li><strong>各生命周期的联系：</strong><ol>
 <li>onStart和onStop从Activity是否可见的角度来回调。</li>
-<li>onResume和onPause从Activity是否处于前台状态的角度回调。</li>
+<li>onResume和onPause从Activity是否可交互（处于前台状态）的角度回调。</li>
 <li>从FirstActivity启动SecondActivity，必须等到FirstActivity先onPause之后SecondActivity才能启动。</li>
 </ol>
 </li>
 </ul>
-<h3 id="异常情况下的生命周期"><a href="#异常情况下的生命周期" class="headerlink" title="异常情况下的生命周期"></a>异常情况下的生命周期</h3><p><img src="http://ouv36g1sw.bkt.clouddn.com/Activity%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" alt="Activity异常情况下的生命周期"></p>
-<ul>
-<li><strong>异常情况下的生命周期：</strong>Activity被系统回收或者设备的Configuration发生改变，从而导致Activity销毁重建的情况下生命周期的改变。</li>
-</ul>
+<h3 id="异常情况下的生命周期"><a href="#异常情况下的生命周期" class="headerlink" title="异常情况下的生命周期"></a>异常情况下的生命周期</h3><blockquote>
+<p>异常情况下的生命周期：Activity被系统回收或者设备的Configuration发生改变，从而导致Activity销毁重建情况下生命周期的改变。</p>
+</blockquote>
+<p><img src="http://ouv36g1sw.bkt.clouddn.com/Activity%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" alt="Activity异常情况下的生命周期"></p>
 <ol>
 <li><strong>资源相关的系统配置发生改变导致Activity被杀死并重新创建</strong><ul>
-<li><strong>Activity状态的保存与恢复：</strong>系统配置发生改变后，会调用onPause、onStop、onDestroy，Activity会被销毁。但是由于是在异常情况下终止，系统会调用onSaveInstancestate来保存当前Activity的状态（正常情况不会回调该方法，该方法只有在Activity即将被销毁并且有机会重新显示才会调用）。 该方法在onStop之前调用，可能在onPause之前也可能在onPause之后调用。Activity在被重新创建后系统回调用onRestoreInstanceState方法将保存状态的Bundler对象作为参数传给onRestoreInstanceState方法和onCreate方法（onRestoreInstanceState一调用其参数Bundle必定有值，而onCreate则不一定有值）。</li>
-<li><strong>Activity视图结构的保存与恢复：</strong>Activity在异常情况下需要重新创建时，系统会默认保存当前当前Activity的视图结构，并且在Activity重启之后来恢复这些数据，如文本框中用户输入的数据、Listview滚动的位置、Radiobutton的选中状态等。具体可以恢复View的哪些数据，需要查看View的onSaveInstanceState和onRestroeInstanceState方法。<em>具体流程：Activity会调用onSaveInstanceState保存数据，然后Activity委托Window去保存数据，接着Window再委托它上面的顶层容器去保存数据，顶层容器一般来说很可能是DecorView，最后顶层容器一一通知它的子容器保存数据</em>。</li>
+<li><strong>Activity状态的保存与恢复：</strong>系统配置发生改变后Activity会被销毁，在销毁之前会调用onPause、onStop、onDestroy。但是由于是在异常情况下终止，系统会调用onSaveInstancestate来保存当前Activity的状态（正常情况不会回调该方法，该方法只有在Activity即将被销毁并且有机会重新显示才被调用）。 该方法在onStop之前调用，但是该方法可能在onPause之前调用，也可能在onPause之后调用。Activity被重新创建后系统回调用onRestoreInstanceState方法将保存状态的Bundle对象作为参数传给onRestoreInstanceState方法和onCreate方法（调用onRestoreInstanceState其参数Bundle必定有值，而onCreate则不一定有值）。</li>
+<li><strong>Activity视图结构的保存与恢复：</strong>Activity在异常情况下需要重新创建时，系统会默认保存当前当前Activity的视图结构，并在Activity重启之后来恢复数据，如文本框中用户输入的数据、Listview滚动的位置、Radiobutton的选中状态等等。具体可以恢复View的哪些数据，需要查看View的onSaveInstanceState和onRestroeInstanceState方法。<em>具体流程：Activity会调用onSaveInstanceState保存数据，然后Activity委托Window去保存数据，接着Window再委托它上面的顶层容器去保存数据，顶层容器一般来说很可能是DecorView，最后顶层容器一一通知它的子容器保存数据</em>。</li>
 <li><strong>系统配置改变却不重建Activity的方式</strong>：指定Activtiy的configChanges属性，常使用的是locale、orientation和keyboardHidden这三个属性，其他属性可查询官方文档。</li>
 <li><strong>横竖屏切换的生命周期改变：</strong><ul>
 <li>在Android3.2，API13以前：<ul>
@@ -519,14 +519,14 @@
 </ol>
 </li>
 <li>Activity生命周期：<ol>
-<li><strong>Activity 的整个生命周期</strong>：发生在 onCreate(调用与 onDestroy() 调用之间。您的 Activity 应在 onCreate()中执行“全局”状态设置（例如定义布局），并释放 onDestroy() 中的所有其余资源。例如，如果您的 Activity 有一个在后台运行的线程，用于从网络上下载数据，它可能会在 onCreate()中创建该线程，然后在 onDestroy() 中停止该线程。</li>
-<li><strong>Activity 的可见生命周期</strong>：发生在 onStart()调用与 onStop()调用之间。在这段时间，用户可以在屏幕上看到 Activity 并与其交互。 例如，当一个新 Activity 启动，并且此 Activity 不再可见时，系统会调用 onStop()。您可以在调用这两个方法之间保留向用户显示 Activity 所需的资源。 例如，您可以在 onStart() 中注册一个 BroadcastReceiver以监控影响 UI 的变化，并在用户无法再看到您显示的内容时在 onStop()中将其取消注册。在 Activity 的整个生命周期，当 Activity 在对用户可见和隐藏两种状态中交替变化时，系统可能会多次调用 onStart()和 onStop()。</li>
-<li><strong>Activity 的前台生命周期</strong>：发生在 onResume() 调用与 onPause()调用之间。在这段时间，Activity 位于屏幕上的所有其他 Activity 之前，并具有用户输入焦点。 Activity 可频繁转入和转出前台 — 例如，当设备转入休眠状态或出现对话框时，系统会调用 onPause()。 由于此状态可能经常发生转变，因此这两个方法中应采用适度轻量级的代码，以避免因转变速度慢而让用户等待</li>
+<li><strong>Activity 的整个生命周期</strong>：发生在 onCreate(调用与 onDestroy() 调用之间。 Activity 应在 onCreate()中执行“全局”状态设置（如定义布局），并在 onDestroy() 中释放的所有资源。例如，如果的 Activity 有一个在后台运行的线程，用于从网络上下载数据，它可能会在 onCreate()中创建该线程，然后在 onDestroy() 中停止该线程。</li>
+<li><strong>Activity 的可见生命周期</strong>：发生在 onStart()调用与 onStop()调用之间。在这段时间，用户可以在屏幕上看到 Activity 。 例如，当一个新 Activity 启动，并且当前 Activity 不再可见时，系统会调用 onStop()。开发者可以在调用这两个方法间保留向用户显示 Activity 所需的资源。 例如在 onStart() 中注册BroadcastReceiver以监控影响 UI 的变化，并在用户无法再看到显示的内容时在 onStop()中将其取消注册。在 Activity 的整个生命周期，当 Activity 在对用户可见和隐藏两种状态中交替变化时，系统可能会多次调用 onStart()和 onStop()。</li>
+<li><strong>Activity 的前台生命周期</strong>：发生在 onResume() 与 onPause()之间。在这段时间，Activity 位于屏幕上的所有其他 Activity 之前，并具有用户输入焦点。 Activity 可频繁转入和转出前台 — 例如，当设备转入休眠状态或出现对话框时，系统会调用 onPause()。 由于此状态可能经常发生转变，因此这两个方法中应采用适度轻量级的代码，以避免因转变速度慢而让用户等待</li>
 </ol>
 </li>
 </ul>
 <h2 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h2><h3 id="启动模式的两种设置方式"><a href="#启动模式的两种设置方式" class="headerlink" title="启动模式的两种设置方式"></a>启动模式的两种设置方式</h3><ol>
-<li>通过AndroidMenifest为Activity指定启动模式。</li>
+<li>通过AndroidMenifest为Activity指定启动模式<code>android:launchMode</code>。</li>
 <li>通过在Intent设置标志为来为Activity指定启动模式。</li>
 </ol>
 <ul>
@@ -534,27 +534,27 @@
 </ul>
 <h3 id="任务栈"><a href="#任务栈" class="headerlink" title="任务栈"></a>任务栈</h3><ul>
 <li>任务栈是一种<strong>后进先出</strong>的栈结构。</li>
-<li>standar启动模式下每次启动Activity都会生成新实例加入返回栈处于栈顶，每按下back键一次就会使栈顶的Activity销毁出栈，直至任务栈清空，当栈中没有任何Activity时，系统就会回收该任务栈。</li>
+<li>standard启动模式下每次启动Activity都会生成新实例加入返回栈处于栈顶，每按下back键一次就会使栈顶的Activity销毁出栈，直 至任务栈清空，当栈中没有任何Activity时，系统就会回收该任务栈。</li>
 <li>只有处于任务栈栈顶的Activity才可以与用户进行交互。</li>
-<li>当推出应用时，必须把所有任务栈中所有Activity清除出栈，任务栈才会被销毁。</li>
-<li>任务栈中的Activity可能并不来自同一App，同时应用中的Activity也可能在不同任务栈中。</li>
+<li>当退出应用时，必须把所有任务栈中所有Activity清除出栈，任务栈才会被销毁。</li>
+<li>任务栈中的Activity可能并不来自同一App，同时应用中的Activity也可能处于不同任务栈中。</li>
 </ul>
 <h3 id="standard标准模式"><a href="#standard标准模式" class="headerlink" title="standard标准模式"></a>standard标准模式</h3><ul>
-<li>每次启动Activity,不管任务栈中是否存在实例，都会重新创建一个实例。</li>
-<li>Activity标准的启动模式启动会调用onCreat、onStart、onResume方法。</li>
-<li>被启动的Activity会处于启动它的Activity的任务栈中。</li>
+<li>每次启动Activity不管任务栈中是否存在该Activity的实例，都会重新创建一个实例。</li>
+<li>Activity标准的启动模式，启动时会调用onCreat、onStart、onResume方法。</li>
+<li>被启动的Activity会处于启动它的Activity的所在的任务栈中。</li>
 </ul>
 <h3 id="singleTop栈顶复用模式"><a href="#singleTop栈顶复用模式" class="headerlink" title="singleTop栈顶复用模式"></a>singleTop栈顶复用模式</h3><ul>
-<li>如果新的Activity已经存在并位于任务栈的栈顶，那么此Activity不会被创建，同时它的onNewInstent方法会被调用。</li>
+<li>如果新的Activity已经存在并位于任务栈的栈顶，那么该Activity不会被创建，只是调用它的onNewInstent方法。</li>
 <li>如果新的Activity实例已经存在但不是位于栈顶，那么该Activity会被重新创建。</li>
 </ul>
 <h3 id="singTask栈内复用模式"><a href="#singTask栈内复用模式" class="headerlink" title="singTask栈内复用模式"></a>singTask栈内复用模式</h3><ul>
-<li>单实例模式，在新Activity请求启动后，系统会勋章是否存在新Activity所需的任务栈，如果任务栈不存在，那么系统会创建新Activity所需的任务栈。如果所需的任务栈已经存在，那么会判断栈中是否存在该Activity实例，如果在栈中已经存在该Activity实例，那么该Activity实例上的其它Activity实例全部出栈，使该Activity实例成为栈顶对象，显示到幕前，系统也会回调onNewInstent。如果此栈中该Activity不存在，那么就会创建该Activity实例并把其压入栈中。</li>
-<li>默认状态下所有Activity所需的任务栈的名字都为应用的包名，但是我们可以制定TaskAffinity的属性值来设置目标任务栈。TaskAffinity属性主要和singTask模式或者allowTaskReparenting属性配对使用，在其它清空下没有意义。</li>
+<li>单实例模式，在新Activity启动后，系统会检查是否存在新Activity所需的任务栈，如果所需任务栈不存在，那么系统会创建所需的任务栈。如果所需的任务栈已经存在，那么会判断栈中是否存在该Activity实例，如果在栈中已经存在该Activity实例，该Activity实例上的其它Activity实例全部出栈，使该Activity实例成为栈顶对象，系统也会回调onNewInstent。如果此栈中该Activity不存在，那么就会创建该Activity实例并把其压入栈中。</li>
+<li>默认状态下所有Activity所需的任务栈的名字都为应用的包名，但是我们可以制定TaskAffinity的属性值来设置目标任务栈。TaskAffinity属性主要和singTask模式或者allowTaskReparenting属性配对使用，在其它情况下没有意义。</li>
 <li>TaskAffinity和allowTaskReparenting结合使用时，如果当A应用启动了B应用的某个ActivityC并且这ActivityC的allowTaskReparenting为true时，那么此当B应用启动时ActivityC会直接从A的任务栈转移到B的任务栈中。此时桌面启动B应用那么打开的会是B应用中的ActivityC，因为ActivityC已经从A应用的任务栈中转移到B应用的任务栈中，所以此时B应用并不会启动主Activity。</li>
 </ul>
 <h3 id="singleInstance"><a href="#singleInstance" class="headerlink" title="singleInstance"></a>singleInstance</h3><ul>
-<li>单实例模式，它会启用一个新的栈结构，将Activity放置于这个新的栈结构中，并保证不再有其他Activity实例进入。singleInstance所标识的Activity，当被启动时，系统会首先判断系统其他栈中是否已经存在此Activity实例，有则直接使用，并且在其所在的Activity栈理论上只有它一个Activity。所以启动它的Activity与它并不在一个Task中，因此需要特别注意Back的问题，因为按下back ，singleInstance所创建的唯一实例就会销毁并且该栈中不存在其他Activity，自然回到了打开改Activity的Activity。 一般表示为：task1 A-&gt;task2 B。singleInstance与singleTask主要区别在于是系统范围内的唯一实例还是当前Activity栈中唯一实例。</li>
+<li>单实例模式，它会启用一个新的任务栈，将Activity放置于这个新的任务栈中，并保证不再有其他Activity实例进入。singleInstance所标识的Activity，当被启动时，系统会首先判断系统所有的任务栈中是否已经存在此Activity实例，有则直接使用，并且在其所在的Activity栈理论上只有它一个Activity。所以启动它的Activity与它并不在一个Task中，因此需要特别注意Back的问题，因为按下back ，singleInstance所创建的唯一实例就会销毁并且该栈中不存在其他Activity，自然回到了打开改Activity的Activity。 一般表示为：task1 A-&gt;task2 B。singleInstance与singleTask主要区别在于是系统范围内的唯一实例还是当前任务栈中唯一实例。</li>
 </ul>
 <h2 id="scheme跳转协议"><a href="#scheme跳转协议" class="headerlink" title="scheme跳转协议"></a>scheme跳转协议</h2><blockquote>
 <p>Android中的自定义的URL Scheme是一种页面内跳转协议，就是通过类似打开网页的方式去通过路由打开一个Activity，而非直接通过显式Intent方式去进行跳转。通过scheme协议，服务器可以预先App跳转哪个页面。可以通过通知栏消息定制化跳转页面，可以动过H5页面跳转页面等。</p>
@@ -816,7 +816,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
