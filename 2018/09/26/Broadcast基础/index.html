@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="格物致知">
+<meta name="description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
 <meta name="keywords" content="Android基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Broadcast基础">
 <meta property="og:url" content="http://yoursite.com/2018/09/26/Broadcast基础/index.html">
 <meta property="og:site_name" content="跬步">
-<meta property="og:description" content="格物致知">
+<meta property="og:description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-26T15:43:40.517Z">
+<meta property="og:updated_time" content="2018-10-07T10:07:21.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Broadcast基础">
-<meta name="twitter:description" content="格物致知">
+<meta name="twitter:description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
 
 
 
@@ -402,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  1.5k
                 </span>
               
 
@@ -418,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  5
                 </span>
               
             </div>
@@ -439,7 +439,65 @@
       
 
       
-        
+        <h1 id="广播机制概述"><a href="#广播机制概述" class="headerlink" title="广播机制概述"></a>广播机制概述</h1><blockquote>
+<p>广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。</p>
+</blockquote>
+<h1 id="系统广播权限的变化"><a href="#系统广播权限的变化" class="headerlink" title="系统广播权限的变化"></a>系统广播权限的变化</h1><ol>
+<li><p>Android 7.0（API24）开始不会发送以下系统广播：</p>
+<ul>
+<li><code>ACTION_NEW_PICTURE</code></li>
+<li><code>ACTION_NEW_VIDEO</code></li>
+</ul>
+<p>并且从Adnroid 7.0 开始，<code>CONNECTIVITY_ACTION</code>广播（网络连接状态改变）的广播接收者必须使用使用显示注册<code>registerReceiver(BroadcastReceiver, IntentFilter)</code>，在清单文件种直接声明该广播接收者将不在起作用。</p>
+</li>
+<li><p>Android 8.0（API26）系统堆清单文件种声明的广播接收者新增了限制，也就是Android 8.0开始，开发者无法使用清单为大多数隐式广播声明接收方，但是任然可以使用显式注册的方式声明广播接收者。</p>
+</li>
+<li><p>Android 9 （API28）开始<code>NETWORK_STATE_CHANGED_ACTION</code>(WIFI连接状态改变)广播中将无法接收到有关用户位置或个人身份数据的信息，例如SSID，BSSID，连接信息或扫描结果等。但是可以通过<code>getConnectionInfo()</code>的方式获取相关数据。</p>
+</li>
+</ol>
+<h1 id="广播发送"><a href="#广播发送" class="headerlink" title="广播发送"></a>广播发送</h1><h2 id="广播发送内容"><a href="#广播发送内容" class="headerlink" title="广播发送内容"></a>广播发送内容</h2><p>广播消息包装在一个<code>Intent</code>对象中。intent的操作字符串必须提供应用程序的Java包名称语法，并唯一标识广播事件。可以使用附加信息或附加其他信息<code>putExtra(String, Bundle)</code>。还可以通过调用<code>setPackage(String)</code>intent 将广播限制为同一组织中的一组应用程序。</p>
+<h2 id="广播发送方式："><a href="#广播发送方式：" class="headerlink" title="广播发送方式："></a>广播发送方式：</h2><ul>
+<li>发送有序广播：<code>sendOrderedBroadcast(Intent, String)</code> 方法一次向一个接收器发送广播。当每个接收者依次执行时，它可以将结果传播到下一个接收者，或者它可以完全中止广播，以便它不会传递给其他接收器。运行的接收者可以使用匹配的intent-filter的android:priority属性进行控制; 具有相同优先级的接收器将以任意顺序运行。</li>
+<li>发送正常广播：<code>sendBroadcast(Intent)</code>方法以未定义的顺序向所有接收者发送广播。效率更高，但接收者无法从其他接收器读取结果，无法发送从广播接收的数据或中止广播。</li>
+<li>发送本地广播：<code>LocalBroadcastManager.sendBroadcast</code>方法将广播发送到与发送者位于同一应用程序中的接收者。如果不需要向其它应用程序发送广播，请使用本地广播。实现效率更高（无需进程间通信），并且无需担心与其他应用程序能够接收或发送广播相关的任何安全问题。</li>
+</ul>
+<h1 id="广播接收者"><a href="#广播接收者" class="headerlink" title="广播接收者"></a>广播接收者</h1><blockquote>
+<p>广播接收者可以对发送过来的Broadcast进行过滤、接收和响应。</p>
+</blockquote>
+<h2 id="广播接收方式——清单文件声明广播接收者"><a href="#广播接收方式——清单文件声明广播接收者" class="headerlink" title="广播接收方式——清单文件声明广播接收者"></a>广播接收方式——清单文件声明广播接收者</h2><blockquote>
+<p>系统软件包管理器在安装应用程序时注册接收器。接收器就成为应用程序的单独入口点，这意味着如果应用程序当前未运行，那么系统会在发送该广播时启动应用（应用未启动）。但是自Android 8.0（API26）开始，无法使用清单文件声明的方式来声明隐式广播的广播接收者。</p>
+</blockquote>
+<ol>
+<li><p><code>&lt;revceiver&gt;</code>在应用清单文件中声明指定元素，intent过滤器指定接收者订阅的广播操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver</span><br><span class="line">    android:name=&quot;.MyBroadcastReceiver&quot;</span><br><span class="line">    android:exported=&quot;true&quot;&gt;</span><br><span class="line">    &lt;intent-filter&gt;</span><br><span class="line">        &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;</span><br><span class="line">        &lt;action android:name=&quot;android.intent .action.INPUT_METHOD_CHANGED&quot; /&gt;</span><br><span class="line">    &lt;/ intent-filter&gt;</span><br><span class="line">&lt;/ receiver&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建<code>BroadcastReceiver</code>子类并实现<code>onReceive(Context, Intent)</code>。广播接收者记录并显示广播的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyBroadcastReceiver extends BroadcastReceiver &#123;</span><br><span class="line">    private static final String TAG = &quot;MyBroadcastReceiver&quot;;</span><br><span class="line">    @Override</span><br><span class="line">    public void onReceive(Context context, Intent intent) &#123;</span><br><span class="line">        String log = &quot;Action: &quot; + intent.getAction() + &quot;\n&quot; +</span><br><span class="line">                &quot;URI: &quot; + intent.toUri(Intent.URI_INTENT_SCHEME) + &quot;\n&quot;;</span><br><span class="line">        Log.w(TAG,log);</span><br><span class="line">        Toast.makeText(context, log, Toast.LENGTH_LONG).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="广播接收方式——通过上下文注册广播接收者"><a href="#广播接收方式——通过上下文注册广播接收者" class="headerlink" title="广播接收方式——通过上下文注册广播接收者"></a>广播接收方式——通过上下文注册广播接收者</h2><ol>
+<li><p>创建一个实例<code>BroadcastReceiver</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>IntentFilter</code>通过调用<code>registerReceiver(BroadcastReceiver, IntentFilter)</code>以下命令创建并注册接收者，广播接收者的声明周期和注册上下文的声明周期一致：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);</span><br><span class="line">filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);</span><br><span class="line">this.registerReceiver(br, filter);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过<code>unregisterReceiver(android.content.BroadcastReceiver)</code>停止广播接收者，当不在需要广播接收者或上下文失效时必须停止广播接收者。需要注意注册和取消注册接收器的位置，例如，在<code>onCreate(Bundle)</code>使用Activity的上下文中注册接收器，则应在<code>onDestroy()</code>取消注册以防止接收者内存泄漏。如果在<code>onResume()</code>注册了接收者，则应在<code>onPause()</code>取消注册，以防止多次注册（如果不想在暂停时接收广播，这可以减少不必要的系统开销）。不要在<code>onSaveInstanceState(Bundle)</code>取消注册，因为用户触发back操作则不会调用此方法。</p>
+</li>
+</ol>
+<h1 id="发送和接收广播的限制"><a href="#发送和接收广播的限制" class="headerlink" title="发送和接收广播的限制"></a>发送和接收广播的限制</h1><h2 id="发送限制"><a href="#发送限制" class="headerlink" title="发送限制"></a>发送限制</h2><ul>
+<li><p>当调用<code>sendBroadcast(Intent, String)</code>或 <code>sendOrderedBroadcast(Intent, String, BroadcastReceiver, Handler, int, String, Bundle)</code>时，可以指定权限参数。只有已经请求该许可的接收者他们的清单中的标签（如果它是危险的，则随后被授予许可）可以接收广播。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendBroadcast(new Intent(&quot;com.example.NOTIFY&quot;),Manifest.permission.SEND_SMS);</span><br></pre></td></tr></table></figure>
+<p>对于广播接收者需要声明相关权限才可接收到广播：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.SEND_SMS&quot;/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不仅可以使用系统的权限，也可以自定义权限。</p>
+</li>
+</ul>
+<h2 id="接收权限"><a href="#接收权限" class="headerlink" title="接收权限"></a>接收权限</h2><ul>
+<li>在注册广播接收器时指定了权限（在清单中带有<code>registerReceiver(BroadcastReceiver, IntentFilter, String, Handler)</code>或在<code>&lt;recevicer&gt;</code>标签中），那么只有已经<code>&lt;uses-permission&gt;</code>在其清单中声明的相应的权限（危险权限需要用户授权权限）的发送者才可以发送对接收者的意图。</li>
+</ul>
+
       
     </div>
     
@@ -583,8 +641,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -645,6 +712,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#广播机制概述"><span class="nav-number">1.</span> <span class="nav-text">广播机制概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统广播权限的变化"><span class="nav-number">2.</span> <span class="nav-text">系统广播权限的变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播发送"><span class="nav-number">3.</span> <span class="nav-text">广播发送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播发送内容"><span class="nav-number">3.1.</span> <span class="nav-text">广播发送内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播发送方式："><span class="nav-number">3.2.</span> <span class="nav-text">广播发送方式：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播接收者"><span class="nav-number">4.</span> <span class="nav-text">广播接收者</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播接收方式——清单文件声明广播接收者"><span class="nav-number">4.1.</span> <span class="nav-text">广播接收方式——清单文件声明广播接收者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播接收方式——通过上下文注册广播接收者"><span class="nav-number">4.2.</span> <span class="nav-text">广播接收方式——通过上下文注册广播接收者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送和接收广播的限制"><span class="nav-number">5.</span> <span class="nav-text">发送和接收广播的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#发送限制"><span class="nav-number">5.1.</span> <span class="nav-text">发送限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接收权限"><span class="nav-number">5.2.</span> <span class="nav-text">接收权限</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -672,7 +755,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">68.5k</span>
+    <span title="Site words total count">70k</span>
   
 </div>
 
