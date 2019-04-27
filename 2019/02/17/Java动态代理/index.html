@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
+<meta name="description" content="代理是什么？ 代理是一种模式，提供对目标对象的间接访问方式，即通过代理访问目标对象。 便于在目标的实现基础上实现额外的功能操作，前拦截、后拦截等。  静态代理 编写一个代理类，实现与目标对象相同的接口，并在内部维护一个目标对象的引用。通过构造器塞入目标对象，在代理对象中调用目标对象的同名方法，并添加前拦截，后拦截等所需的业务功能。   静态代理的实现方式  统一接口 123public inter">
 <meta name="keywords" content="Android基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Broadcast基础">
-<meta property="og:url" content="http://yoursite.com/2018/09/26/Broadcast基础/index.html">
+<meta property="og:title" content="java动态代理">
+<meta property="og:url" content="http://yoursite.com/2019/02/17/Java动态代理/index.html">
 <meta property="og:site_name" content="跬步">
-<meta property="og:description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
+<meta property="og:description" content="代理是什么？ 代理是一种模式，提供对目标对象的间接访问方式，即通过代理访问目标对象。 便于在目标的实现基础上实现额外的功能操作，前拦截、后拦截等。  静态代理 编写一个代理类，实现与目标对象相同的接口，并在内部维护一个目标对象的引用。通过构造器塞入目标对象，在代理对象中调用目标对象的同名方法，并添加前拦截，后拦截等所需的业务功能。   静态代理的实现方式  统一接口 123public inter">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-07T10:07:21.416Z">
+<meta property="og:updated_time" content="2019-04-27T08:28:53.580Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Broadcast基础">
-<meta name="twitter:description" content="广播机制概述 广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。  系统广播权限的变化 Android 7.0（API24）开始不会发送以下系统广播：  ACTION_NEW_PICTURE ACTION_NEW_VI">
+<meta name="twitter:title" content="java动态代理">
+<meta name="twitter:description" content="代理是什么？ 代理是一种模式，提供对目标对象的间接访问方式，即通过代理访问目标对象。 便于在目标的实现基础上实现额外的功能操作，前拦截、后拦截等。  静态代理 编写一个代理类，实现与目标对象相同的接口，并在内部维护一个目标对象的引用。通过构造器塞入目标对象，在代理对象中调用目标对象的同名方法，并添加前拦截，后拦截等所需的业务功能。   静态代理的实现方式  统一接口 123public inter">
 
 
 
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/26/Broadcast基础/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/02/17/Java动态代理/"/>
 
 
 
@@ -142,7 +142,7 @@
         border-left-color: #ffffff;    /*左边框颜色*/
     }
 </style>
-  <title>Broadcast基础 | 跬步</title>
+  <title>java动态代理 | 跬步</title>
   
 
 
@@ -308,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/26/Broadcast基础/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/17/Java动态代理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="作茧自缚">
@@ -325,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Broadcast基础</h1>
+          <h1 class="post-title" itemprop="name headline">java动态代理</h1>
         
 
         <div class="post-meta">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-26T23:43:19+08:00">
-                2018-09-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-17T16:27:34+08:00">
+                2019-02-17
               </time>
             
 
@@ -378,9 +378,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/26/Broadcast基础/#comments" itemprop="discussionUrl">
+                <a href="/2019/02/17/Java动态代理/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/26/Broadcast基础/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/02/17/Java动态代理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -402,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.5k
+                  1.4k
                 </span>
               
 
@@ -439,64 +439,77 @@
       
 
       
-        <h1 id="广播机制概述"><a href="#广播机制概述" class="headerlink" title="广播机制概述"></a>广播机制概述</h1><blockquote>
-<p>广播机制是在组件之间传播数据的一种机制，这些组件可以位于不同的进程中，起到进程间通信的作用。通过广播可以通知系统或指定应用消息，或者监听来自系统或者应用的广播通知，类似于发布——订阅设计模式。其包含两个角色：广播发送者、广播接收者。</p>
+        <h1 id="代理是什么？"><a href="#代理是什么？" class="headerlink" title="代理是什么？"></a>代理是什么？</h1><blockquote>
+<p>代理是一种模式，提供对目标对象的间接访问方式，即通过代理访问目标对象。</p>
+<p>便于在目标的实现基础上实现额外的功能操作，前拦截、后拦截等。</p>
 </blockquote>
-<h1 id="系统广播权限的变化"><a href="#系统广播权限的变化" class="headerlink" title="系统广播权限的变化"></a>系统广播权限的变化</h1><ol>
-<li><p>Android 7.0（API24）开始不会发送以下系统广播：</p>
+<h1 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h1><blockquote>
+<p>编写一个代理类，实现与目标对象相同的接口，并在内部维护一个目标对象的引用。通过构造器塞入目标对象，在代理对象中调用目标对象的同名方法，并添加前拦截，后拦截等所需的业务功能。</p>
+</blockquote>
 <ul>
-<li><code>ACTION_NEW_PICTURE</code></li>
-<li><code>ACTION_NEW_VIDEO</code></li>
-</ul>
-<p>并且从Adnroid 7.0 开始，<code>CONNECTIVITY_ACTION</code>广播（网络连接状态改变）的广播接收者必须使用使用显示注册<code>registerReceiver(BroadcastReceiver, IntentFilter)</code>，在清单文件种直接声明该广播接收者将不在起作用。</p>
+<li><p>静态代理的实现方式</p>
+<ol>
+<li><p>统一接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Human &#123;</span><br><span class="line">	void eat(String food);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Android 8.0（API26）系统堆清单文件种声明的广播接收者新增了限制，也就是Android 8.0开始，开发者无法使用清单为大多数隐式广播声明接收方，但是任然可以使用显式注册的方式声明广播接收者。</p>
+<li><p>目标对象实现类实际实现功能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class HumanImpl implements Human &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void eat(String food) &#123;</span><br><span class="line">		System.out.println(&quot;Today human eat&quot; + food);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Android 9 （API28）开始<code>NETWORK_STATE_CHANGED_ACTION</code>(WIFI连接状态改变)广播中将无法接收到有关用户位置或个人身份数据的信息，例如SSID，BSSID，连接信息或扫描结果等。但是可以通过<code>getConnectionInfo()</code>的方式获取相关数据。</p>
+<li><p>代理对象实现类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class HumanProxy implements Human &#123;</span><br><span class="line"></span><br><span class="line">	Human human;</span><br><span class="line"></span><br><span class="line">	public HumanProxy(Human human) &#123;</span><br><span class="line">		this.human = human;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">	public void eat(String food) &#123;</span><br><span class="line">		// 前拦截 dosSomething();</span><br><span class="line">		human.eat(food);</span><br><span class="line">		// 后拦截 dosSomething();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最终通过代理对象访问目标对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		//把目标对象通过构造器塞入代理对象</span><br><span class="line">		Human human = new HumanProxy(new HumanImpl());</span><br><span class="line">		//代理对象调用目标对象方法，并在前后打印日志或其它操作</span><br><span class="line">		human.eat(&quot;西兰花&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h1 id="广播发送"><a href="#广播发送" class="headerlink" title="广播发送"></a>广播发送</h1><h2 id="广播发送内容"><a href="#广播发送内容" class="headerlink" title="广播发送内容"></a>广播发送内容</h2><p>广播消息包装在一个<code>Intent</code>对象中。intent的操作字符串必须提供应用程序的Java包名称语法，并唯一标识广播事件。可以使用附加信息或附加其他信息<code>putExtra(String, Bundle)</code>。还可以通过调用<code>setPackage(String)</code>intent 将广播限制为同一组织中的一组应用程序。</p>
-<h2 id="广播发送方式："><a href="#广播发送方式：" class="headerlink" title="广播发送方式："></a>广播发送方式：</h2><ul>
-<li>发送有序广播：<code>sendOrderedBroadcast(Intent, String)</code> 方法一次向一个接收器发送广播。当每个接收者依次执行时，它可以将结果传播到下一个接收者，或者它可以完全中止广播，以便它不会传递给其他接收器。运行的接收者可以使用匹配的intent-filter的android:priority属性进行控制; 具有相同优先级的接收器将以任意顺序运行。</li>
-<li>发送正常广播：<code>sendBroadcast(Intent)</code>方法以未定义的顺序向所有接收者发送广播。效率更高，但接收者无法从其他接收器读取结果，无法发送从广播接收的数据或中止广播。</li>
-<li>发送本地广播：<code>LocalBroadcastManager.sendBroadcast</code>方法将广播发送到与发送者位于同一应用程序中的接收者。如果不需要向其它应用程序发送广播，请使用本地广播。实现效率更高（无需进程间通信），并且无需担心与其他应用程序能够接收或发送广播相关的任何安全问题。</li>
+</li>
+<li><p>静态代理的优点：</p>
+<ul>
+<li>可以在不修改目标对象的前提下，对目标对象进行功能的扩展和拦截。</li>
+<li>对扩展开发，对修改关闭</li>
 </ul>
-<h1 id="广播接收者"><a href="#广播接收者" class="headerlink" title="广播接收者"></a>广播接收者</h1><blockquote>
-<p>广播接收者可以对发送过来的Broadcast进行过滤、接收和响应。</p>
-</blockquote>
-<h2 id="广播接收方式——清单文件声明广播接收者"><a href="#广播接收方式——清单文件声明广播接收者" class="headerlink" title="广播接收方式——清单文件声明广播接收者"></a>广播接收方式——清单文件声明广播接收者</h2><blockquote>
-<p>系统软件包管理器在安装应用程序时注册接收器。接收器就成为应用程序的单独入口点，这意味着如果应用程序当前未运行，那么系统会在发送该广播时启动应用（应用未启动）。但是自Android 8.0（API26）开始，无法使用清单文件声明的方式来声明隐式广播的广播接收者。</p>
+</li>
+<li><p>静态代理的缺点：</p>
+<ul>
+<li>如果Human接口有几十上百的方法，对每一个方法扩展和拦截，需要一个个方法进行修改，工作量太大并且不利于后期的维护。</li>
+<li>可能存在重复代码。</li>
+<li>HumanProxy只能接收Human的实现类对象，所以对于不同的接口每一次都需创建相应的代理对象。</li>
+</ul>
+</li>
+</ul>
+<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><h2 id="从静态代理到动态代理"><a href="#从静态代理到动态代理" class="headerlink" title="从静态代理到动态代理"></a>从静态代理到动态代理</h2><blockquote>
+<p>通过静态代理的实现，我们发现真正需要的是代理对象，而不是代理类。因为我们的一贯认知是：先有类，再有对象。</p>
 </blockquote>
 <ol>
-<li><p><code>&lt;revceiver&gt;</code>在应用清单文件中声明指定元素，intent过滤器指定接收者订阅的广播操作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver</span><br><span class="line">    android:name=&quot;.MyBroadcastReceiver&quot;</span><br><span class="line">    android:exported=&quot;true&quot;&gt;</span><br><span class="line">    &lt;intent-filter&gt;</span><br><span class="line">        &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;</span><br><span class="line">        &lt;action android:name=&quot;android.intent .action.INPUT_METHOD_CHANGED&quot; /&gt;</span><br><span class="line">    &lt;/ intent-filter&gt;</span><br><span class="line">&lt;/ receiver&gt;</span><br></pre></td></tr></table></figure>
+<li>接口和类的区别：接口定义了方法，只是没有具体实现（方法体），除此之外和类都是相同的。</li>
+<li>对于代理对象来说方法体并不重要，因为代理对象可以直接调用目标对象的方法来完成需求。即对于代理对象来说，自身方法实现并不重要，重要的是如何调用目标对象的方法实现。</li>
+<li>本质上我们只需要一个根据接口生成一个“空壳”的代理对象的壳而已。</li>
+<li>JDK提供了一组API，可以让我们动态地在内存中构建代理对象（需传入目标类实现的接口）。这种代理方式称为JDK动态代理</li>
+</ol>
+<h2 id="对象创建的过程"><a href="#对象创建的过程" class="headerlink" title="对象创建的过程"></a>对象创建的过程</h2><ol>
+<li>加载类，ClassLoader加载.class（字节码）文件到内存，执行静态代码块和静态初始化语句。</li>
+<li>执行new，申请一片内存空间。</li>
+<li>调用构造器，创建一个空白的Class对象。</li>
+<li>子类调用父类的构造器。</li>
+<li>构造器执行，执行构造代码块和初始化语句，构造器内容。</li>
+</ol>
+<ul>
+<li>接口也是一个类，所以当接口类被加载到内存会创建一个空白的对象，此时我们所需的代理对象已经有了，但是接口对象有方法但是缺少方法体，但是我们最终只需调用目标对象实现类的方法即可，所以方法体也不是必须。</li>
+</ul>
+<h2 id="动态代理实现"><a href="#动态代理实现" class="headerlink" title="动态代理实现"></a>动态代理实现</h2><ol>
+<li><p>Proxy.getProxyClass(ClassLoader loader,Class&lt;?&gt;… interfaces)：传入ClassLoader和一组接口返回代理类的Class对象，而不用实际编写代理类。本质上我们是通过Proxy类的静态方法，从接口Class身上“借”了它的方法信息，自己本身又有一个构造器，最终才创建了一个新的加强版的代理Class&lt;$Proxy0&gt;对象，也就是$Proxy0。与原先接口Class当然不存在继承或实现关系。</p>
 </li>
-<li><p>创建<code>BroadcastReceiver</code>子类并实现<code>onReceive(Context, Intent)</code>。广播接收者记录并显示广播的内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyBroadcastReceiver extends BroadcastReceiver &#123;</span><br><span class="line">    private static final String TAG = &quot;MyBroadcastReceiver&quot;;</span><br><span class="line">    @Override</span><br><span class="line">    public void onReceive(Context context, Intent intent) &#123;</span><br><span class="line">        String log = &quot;Action: &quot; + intent.getAction() + &quot;\n&quot; +</span><br><span class="line">                &quot;URI: &quot; + intent.toUri(Intent.URI_INTENT_SCHEME) + &quot;\n&quot;;</span><br><span class="line">        Log.w(TAG,log);</span><br><span class="line">        Toast.makeText(context, log, Toast.LENGTH_LONG).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>获取新的加强版的代理Class&lt;$Proxy0&gt;对象之后，便是通过反射获取代理对象$Proxy0的实例。通过反射getConstructor(InvocationHandler.class)方法获取指定类InvocationHandler.class的构造方法。</p>
+</li>
+<li><p>通过指定类InvocationHandler.class的构造方法获取代理对象$Proxy0的实例。</p>
+</li>
+<li><p>每次调用代理对象的方法时，都会调用它里面的invocationHandler的invoke()方法。但是我们需要的是代理对象调用目标对象的方法。</p>
+</li>
+<li><p>在invoke()方法内部调用目标对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 获取加强版的代理Class&lt;$Proxy0&gt;对象</span><br><span class="line">Class&lt;?&gt; humanProxyClass = Proxy.getProxyClass(Human.class.getClassLoader(), Human.class);</span><br><span class="line">try &#123;</span><br><span class="line">	// 获取InvocationHandler的构造方法</span><br><span class="line">    Constructor&lt;?&gt; constructor = humanProxyClass.getConstructor(InvocationHandler.class);</span><br><span class="line">    // 通过指定类InvocationHandler.class的构造方法获取代理对象$Proxy0的实例</span><br><span class="line">    Human humanProxyImpl = (Human) constructor.newInstance(new InvocationHandler() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">        	// 前拦截 dosSomething();</span><br><span class="line">            // 手动创建目标对象</span><br><span class="line">            HumanImpl humanImpl = new HumanImpl();</span><br><span class="line">            // 反射执行目标对象方法</span><br><span class="line">            Object result = method.invoke(humanImpl, args);</span><br><span class="line">            // 后拦截 dosSomething();</span><br><span class="line">            // 返回目标对象执行结果</span><br><span class="line">            return result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    humanProxyImpl.eat(&quot;猪肉&quot;);</span><br><span class="line">&#125; catch (NoSuchMethodException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; catch (InstantiationException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="广播接收方式——通过上下文注册广播接收者"><a href="#广播接收方式——通过上下文注册广播接收者" class="headerlink" title="广播接收方式——通过上下文注册广播接收者"></a>广播接收方式——通过上下文注册广播接收者</h2><ol>
-<li><p>创建一个实例<code>BroadcastReceiver</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>IntentFilter</code>通过调用<code>registerReceiver(BroadcastReceiver, IntentFilter)</code>以下命令创建并注册接收者，广播接收者的声明周期和注册上下文的声明周期一致：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);</span><br><span class="line">filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);</span><br><span class="line">this.registerReceiver(br, filter);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过<code>unregisterReceiver(android.content.BroadcastReceiver)</code>停止广播接收者，当不在需要广播接收者或上下文失效时必须停止广播接收者。需要注意注册和取消注册接收器的位置，例如，在<code>onCreate(Bundle)</code>使用Activity的上下文中注册接收器，则应在<code>onDestroy()</code>取消注册以防止接收者内存泄漏。如果在<code>onResume()</code>注册了接收者，则应在<code>onPause()</code>取消注册，以防止多次注册（如果不想在暂停时接收广播，这可以减少不必要的系统开销）。不要在<code>onSaveInstanceState(Bundle)</code>取消注册，因为用户触发back操作则不会调用此方法。</p>
-</li>
-</ol>
-<h1 id="发送和接收广播的限制"><a href="#发送和接收广播的限制" class="headerlink" title="发送和接收广播的限制"></a>发送和接收广播的限制</h1><h2 id="发送限制"><a href="#发送限制" class="headerlink" title="发送限制"></a>发送限制</h2><ul>
-<li><p>当调用<code>sendBroadcast(Intent, String)</code>或 <code>sendOrderedBroadcast(Intent, String, BroadcastReceiver, Handler, int, String, Bundle)</code>时，可以指定权限参数。只有已经请求该许可的接收者他们的清单中的标签（如果它是危险的，则随后被授予许可）可以接收广播。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendBroadcast(new Intent(&quot;com.example.NOTIFY&quot;),Manifest.permission.SEND_SMS);</span><br></pre></td></tr></table></figure>
-<p>对于广播接收者需要声明相关权限才可接收到广播：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.SEND_SMS&quot;/&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不仅可以使用系统的权限，也可以自定义权限。</p>
-</li>
-</ul>
-<h2 id="接收权限"><a href="#接收权限" class="headerlink" title="接收权限"></a>接收权限</h2><ul>
-<li>在注册广播接收器时指定了权限（在清单中带有<code>registerReceiver(BroadcastReceiver, IntentFilter, String, Handler)</code>或在<code>&lt;recevicer&gt;</code>标签中），那么只有已经<code>&lt;uses-permission&gt;</code>在其清单中声明的相应的权限（危险权限需要用户授权权限）的发送者才可以发送对接收者的意图。</li>
-</ul>
+<h2 id="动态代理实现优化"><a href="#动态代理实现优化" class="headerlink" title="动态代理实现优化"></a>动态代理实现优化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		HumanImpl humanImpl = new HumanImpl();</span><br><span class="line">		Human humanProxy = (Human) getProxy(humanImpl);</span><br><span class="line">		humanProxy.eat(&quot;瘦肉&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private  static Object getProxy(final HumanImpl target) &#123;</span><br><span class="line">        Object proxyInstance = Proxy.newProxyInstance(Human.class.getClassLoader(), 	Human.class.getInterfaces(), new InvocationHandler() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">                // 前拦截 dosSomething();</span><br><span class="line">                Object result = method.invoke(target, args);</span><br><span class="line">                // 后拦截 dosSomething();</span><br><span class="line">                return result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        return proxyInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -535,8 +548,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/16/Fragment基础/" rel="next" title="Fragment基础">
-                <i class="fa fa-chevron-left"></i> Fragment基础
+              <a href="/2018/09/26/Broadcast基础/" rel="next" title="Broadcast基础">
+                <i class="fa fa-chevron-left"></i> Broadcast基础
               </a>
             
           </div>
@@ -544,10 +557,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/17/Java动态代理/" rel="prev" title="java动态代理">
-                java动态代理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -725,7 +734,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#广播机制概述"><span class="nav-number">1.</span> <span class="nav-text">广播机制概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统广播权限的变化"><span class="nav-number">2.</span> <span class="nav-text">系统广播权限的变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播发送"><span class="nav-number">3.</span> <span class="nav-text">广播发送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播发送内容"><span class="nav-number">3.1.</span> <span class="nav-text">广播发送内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播发送方式："><span class="nav-number">3.2.</span> <span class="nav-text">广播发送方式：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播接收者"><span class="nav-number">4.</span> <span class="nav-text">广播接收者</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播接收方式——清单文件声明广播接收者"><span class="nav-number">4.1.</span> <span class="nav-text">广播接收方式——清单文件声明广播接收者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播接收方式——通过上下文注册广播接收者"><span class="nav-number">4.2.</span> <span class="nav-text">广播接收方式——通过上下文注册广播接收者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送和接收广播的限制"><span class="nav-number">5.</span> <span class="nav-text">发送和接收广播的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#发送限制"><span class="nav-number">5.1.</span> <span class="nav-text">发送限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接收权限"><span class="nav-number">5.2.</span> <span class="nav-text">接收权限</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代理是什么？"><span class="nav-number">1.</span> <span class="nav-text">代理是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态代理"><span class="nav-number">2.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态代理"><span class="nav-number">3.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#从静态代理到动态代理"><span class="nav-number">3.1.</span> <span class="nav-text">从静态代理到动态代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象创建的过程"><span class="nav-number">3.2.</span> <span class="nav-text">对象创建的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理实现"><span class="nav-number">3.3.</span> <span class="nav-text">动态代理实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理实现优化"><span class="nav-number">3.4.</span> <span class="nav-text">动态代理实现优化</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -905,9 +914,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/09/26/Broadcast基础/';
-          this.page.identifier = '2018/09/26/Broadcast基础/';
-          this.page.title = 'Broadcast基础';
+          this.page.url = 'http://yoursite.com/2019/02/17/Java动态代理/';
+          this.page.identifier = '2019/02/17/Java动态代理/';
+          this.page.title = 'java动态代理';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zhizhi.disqus.com/embed.js';
