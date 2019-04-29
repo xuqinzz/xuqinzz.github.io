@@ -3,7 +3,13 @@
   <entry>
     <title><![CDATA[Okhttp3源码浅析]]></title>
     <url>%2F2019%2F04%2F29%2FOkhttp3%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[Okhttp的使用12345678910111213141516171819202122232425262728// 创建请求客户端 OkhttpClientOkHttpClient okHttpClient = new OkHttpClient.Builder().build();// 构建请求体Request request = new Request .Builder() .url(&quot;www.github.com&quot;) .addHeader(&quot;token&quot;, &quot;70DA53F9B9D8A3D6345F1A7C4BC1A4A8&quot;) .build();// 生成一个call对象 由RealCall实现Call接口的方法Call call = okHttpClient.newCall(request);try &#123; // 同步请求 Response response = call.execute(); // 异步请求 call.enqueue(new Callback() &#123; @Override public void onFailure(Call call, IOException e) &#123; &#125; @Override public void onResponse(Call call, Response response) throws IOException &#123; &#125; &#125;);&#125; catch (IOException e) &#123; e.printStackTrace();&#125; OkhttpClient的创建OkHttpClient okHttpClient = new OkHttpClient.Builder().build(); OkhttpClient中使用建造者设计模式进行初始化 Builder()方法中初始化了部分值 1234567891011121314151617181920212223242526public Builder() &#123; dispatcher = new Dispatcher(); protocols = DEFAULT_PROTOCOLS; connectionSpecs = DEFAULT_CONNECTION_SPECS; eventListenerFactory = EventListener.factory(EventListener.NONE); proxySelector = ProxySelector.getDefault(); if (proxySelector == null) &#123; proxySelector = new NullProxySelector(); &#125; cookieJar = CookieJar.NO_COOKIES; socketFactory = SocketFactory.getDefault(); hostnameVerifier = OkHostnameVerifier.INSTANCE; certificatePinner = CertificatePinner.DEFAULT; proxyAuthenticator = Authenticator.NONE; authenticator = Authenticator.NONE; connectionPool = new ConnectionPool(); dns = Dns.SYSTEM; followSslRedirects = true; followRedirects = true; retryOnConnectionFailure = true; callTimeout = 0; connectTimeout = 10_000; readTimeout = 10_000; writeTimeout = 10_000; pingInterval = 0;&#125; Reqeuest的构建同步请求异步请求]]></content>
+      <categories>
+        <category>源码分析</category>
+      </categories>
+      <tags>
+        <tag>源码分析</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[java动态代理]]></title>

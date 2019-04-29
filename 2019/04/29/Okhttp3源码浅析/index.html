@@ -70,7 +70,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="源码分析," />
 
 
 
@@ -81,17 +81,18 @@
 
 
 
-<meta name="description" content="格物致知">
+<meta name="description" content="Okhttp的使用12345678910111213141516171819202122232425262728// 创建请求客户端 OkhttpClientOkHttpClient okHttpClient = new OkHttpClient.Builder().build();// 构建请求体Request request = new Request        .Builder()">
+<meta name="keywords" content="源码分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Okhttp3源码浅析">
 <meta property="og:url" content="http://yoursite.com/2019/04/29/Okhttp3源码浅析/index.html">
 <meta property="og:site_name" content="跬步">
-<meta property="og:description" content="格物致知">
+<meta property="og:description" content="Okhttp的使用12345678910111213141516171819202122232425262728// 创建请求客户端 OkhttpClientOkHttpClient okHttpClient = new OkHttpClient.Builder().build();// 构建请求体Request request = new Request        .Builder()">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-29T13:41:59.068Z">
+<meta property="og:updated_time" content="2019-04-29T15:30:27.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Okhttp3源码浅析">
-<meta name="twitter:description" content="格物致知">
+<meta name="twitter:description" content="Okhttp的使用12345678910111213141516171819202122232425262728// 创建请求客户端 OkhttpClientOkHttpClient okHttpClient = new OkHttpClient.Builder().build();// 构建请求体Request request = new Request        .Builder()">
 
 
 
@@ -347,6 +348,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -379,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  226
                 </span>
               
 
@@ -416,7 +439,14 @@
       
 
       
-        
+        <h1 id="Okhttp的使用"><a href="#Okhttp的使用" class="headerlink" title="Okhttp的使用"></a>Okhttp的使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 创建请求客户端 OkhttpClient</span><br><span class="line">OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</span><br><span class="line">// 构建请求体</span><br><span class="line">Request request = new Request</span><br><span class="line">        .Builder()</span><br><span class="line">        .url(&quot;www.github.com&quot;)</span><br><span class="line">        .addHeader(&quot;token&quot;, &quot;70DA53F9B9D8A3D6345F1A7C4BC1A4A8&quot;)</span><br><span class="line">        .build();</span><br><span class="line">// 生成一个call对象 由RealCall实现Call接口的方法</span><br><span class="line">Call call = okHttpClient.newCall(request);</span><br><span class="line">try &#123;</span><br><span class="line">    // 同步请求</span><br><span class="line">    Response response = call.execute();</span><br><span class="line">    // 异步请求</span><br><span class="line">    call.enqueue(new Callback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onFailure(Call call, IOException e) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onResponse(Call call, Response response) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="OkhttpClient的创建"><a href="#OkhttpClient的创建" class="headerlink" title="OkhttpClient的创建"></a>OkhttpClient的创建</h1><p><code>OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</code></p>
+<h2 id="OkhttpClient中使用建造者设计模式进行初始化"><a href="#OkhttpClient中使用建造者设计模式进行初始化" class="headerlink" title="OkhttpClient中使用建造者设计模式进行初始化"></a>OkhttpClient中使用建造者设计模式进行初始化</h2><ul>
+<li><p>Builder()方法中初始化了部分值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public Builder() &#123;</span><br><span class="line">  dispatcher = new Dispatcher();</span><br><span class="line">  protocols = DEFAULT_PROTOCOLS;</span><br><span class="line">  connectionSpecs = DEFAULT_CONNECTION_SPECS;</span><br><span class="line">  eventListenerFactory = EventListener.factory(EventListener.NONE);</span><br><span class="line">  proxySelector = ProxySelector.getDefault();</span><br><span class="line">  if (proxySelector == null) &#123;</span><br><span class="line">    proxySelector = new NullProxySelector();</span><br><span class="line">  &#125;</span><br><span class="line">  cookieJar = CookieJar.NO_COOKIES;</span><br><span class="line">  socketFactory = SocketFactory.getDefault();</span><br><span class="line">  hostnameVerifier = OkHostnameVerifier.INSTANCE;</span><br><span class="line">  certificatePinner = CertificatePinner.DEFAULT;</span><br><span class="line">  proxyAuthenticator = Authenticator.NONE;</span><br><span class="line">  authenticator = Authenticator.NONE;</span><br><span class="line">  connectionPool = new ConnectionPool();</span><br><span class="line">  dns = Dns.SYSTEM;</span><br><span class="line">  followSslRedirects = true;</span><br><span class="line">  followRedirects = true;</span><br><span class="line">  retryOnConnectionFailure = true;</span><br><span class="line">  callTimeout = 0;</span><br><span class="line">  connectTimeout = 10_000;</span><br><span class="line">  readTimeout = 10_000;</span><br><span class="line">  writeTimeout = 10_000;</span><br><span class="line">  pingInterval = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Reqeuest的构建"><a href="#Reqeuest的构建" class="headerlink" title="Reqeuest的构建"></a>Reqeuest的构建</h1><h1 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h1><h1 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h1>
       
     </div>
     
@@ -438,6 +468,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码分析/" <i class="fa fa-tag"></i>源码分析</a>
+          
+        </div>
       
 
       
@@ -554,8 +590,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -616,6 +661,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Okhttp的使用"><span class="nav-number">1.</span> <span class="nav-text">Okhttp的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkhttpClient的创建"><span class="nav-number">2.</span> <span class="nav-text">OkhttpClient的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OkhttpClient中使用建造者设计模式进行初始化"><span class="nav-number">2.1.</span> <span class="nav-text">OkhttpClient中使用建造者设计模式进行初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reqeuest的构建"><span class="nav-number">3.</span> <span class="nav-text">Reqeuest的构建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步请求"><span class="nav-number">4.</span> <span class="nav-text">同步请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步请求"><span class="nav-number">5.</span> <span class="nav-text">异步请求</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -643,7 +704,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">71.4k</span>
+    <span title="Site words total count">71.7k</span>
   
 </div>
 
