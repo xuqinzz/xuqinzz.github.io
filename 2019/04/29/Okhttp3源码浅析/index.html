@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="Okhttp简介 Okhttp是一个http客户端，默认提供一下支持：  HTTP / 2支持允许同一主机的所有请求共享socket。 在HTTP / 2不可用的情况下，Okhttp的连接池将会减少请求延迟。  通过GZIP压缩减少数据大小。 通过响应缓存完全避免重复的网络请求。   Okhttp的使用12345678910111213141516171819202122232425262728/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-01T17:14:46.813Z">
+<meta property="og:updated_time" content="2019-05-03T17:42:46.438Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Okhttp3源码浅析">
 <meta name="twitter:description" content="Okhttp简介 Okhttp是一个http客户端，默认提供一下支持：  HTTP / 2支持允许同一主机的所有请求共享socket。 在HTTP / 2不可用的情况下，Okhttp的连接池将会减少请求延迟。  通过GZIP压缩减少数据大小。 通过响应缓存完全避免重复的网络请求。   Okhttp的使用12345678910111213141516171819202122232425262728/">
@@ -402,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  387
+                  1.3k
                 </span>
               
 
@@ -418,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
@@ -451,8 +451,38 @@
 <h1 id="Okhttp的使用"><a href="#Okhttp的使用" class="headerlink" title="Okhttp的使用"></a>Okhttp的使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 创建请求客户端 OkhttpClient</span><br><span class="line">OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</span><br><span class="line">// 构建请求体</span><br><span class="line">Request request = new Request</span><br><span class="line">		.Builder()</span><br><span class="line">		.url(&quot;www.github.com&quot;)</span><br><span class="line">		.addHeader(&quot;token&quot;, &quot;70DA53F9B9D8A3D6345F1A7C4BC1A4A8&quot;)</span><br><span class="line">		.build();</span><br><span class="line">// 生成一个call对象 由RealCall实现Call接口的方法</span><br><span class="line">Call call = okHttpClient.newCall(request);</span><br><span class="line">try &#123;</span><br><span class="line">	// 同步请求</span><br><span class="line">	Response response = call.execute();</span><br><span class="line">	// 异步请求</span><br><span class="line">	call.enqueue(new Callback() &#123;</span><br><span class="line">		@Override</span><br><span class="line">		public void onFailure(Call call, IOException e) &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		@Override</span><br><span class="line">		public void onResponse(Call call, Response response) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="OkhttpClient的创建"><a href="#OkhttpClient的创建" class="headerlink" title="OkhttpClient的创建"></a>OkhttpClient的创建</h1><p><code>OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</code></p>
 <h2 id="OkhttpClient中使用建造者设计模式进行初始化"><a href="#OkhttpClient中使用建造者设计模式进行初始化" class="headerlink" title="OkhttpClient中使用建造者设计模式进行初始化"></a>OkhttpClient中使用建造者设计模式进行初始化</h2><ul>
-<li><p>Builder()方法中初始化了部分值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> public Builder() &#123;</span><br><span class="line"> 	// 调度器，⽤于调度后台发起的⽹络请求，有后台总请求数和单主机总请求数的控制。</span><br><span class="line"> 	dispatcher = new Dispatcher();</span><br><span class="line"> 	// List&lt;Protocol&gt; protocols ：⽀持的应⽤层协议，即 HTTP/1.1、HTTP/2 等。</span><br><span class="line"> 	protocols = DEFAULT_PROTOCOLS;</span><br><span class="line"> 	// 应⽤层⽀持的 Socket 设置，即使⽤明⽂传输（⽤于HTTP）还是某个版本的TLS（⽤于 HTTPS）。</span><br><span class="line"> 	connectionSpecs = DEFAULT_CONNECTION_SPECS;</span><br><span class="line"> 	// </span><br><span class="line"> 	eventListenerFactory = EventListener.factory(EventListener.NONE);</span><br><span class="line"> 	proxySelector = ProxySelector.getDefault();</span><br><span class="line"> 	if (proxySelector == null) &#123;</span><br><span class="line"> 		proxySelector = new NullProxySelector();</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	cookieJar = CookieJar.NO_COOKIES;</span><br><span class="line"> 	socketFactory = SocketFactory.getDefault();</span><br><span class="line"> 	hostnameVerifier = OkHostnameVerifier.INSTANCE;</span><br><span class="line"> 	certificatePinner = CertificatePinner.DEFAULT;</span><br><span class="line"> 	proxyAuthenticator = Authenticator.NONE;</span><br><span class="line"> 	authenticator = Authenticator.NONE;</span><br><span class="line"> 	connectionPool = new ConnectionPool();</span><br><span class="line"> 	dns = Dns.SYSTEM;</span><br><span class="line"> 	followSslRedirects = true;</span><br><span class="line"> 	followRedirects = true;</span><br><span class="line"> 	retryOnConnectionFailure = true;</span><br><span class="line"> 	callTimeout = 0;</span><br><span class="line"> 	connectTimeout = 10_000;</span><br><span class="line"> 	readTimeout = 10_000;</span><br><span class="line">writeTimeout = 10_000;</span><br><span class="line"> 	pingInterval = 0;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<li><p>Builder()初始化代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public Builder() &#123;</span><br><span class="line">	dispatcher = new Dispatcher();</span><br><span class="line">	protocols = DEFAULT_PROTOCOLS;</span><br><span class="line">	connectionSpecs = DEFAULT_CONNECTION_SPECS;</span><br><span class="line">	eventListenerFactory = EventListener.factory(EventListener.NONE);</span><br><span class="line">	proxySelector = ProxySelector.getDefault();</span><br><span class="line">	if (proxySelector == null) &#123;</span><br><span class="line">		// 如果不存在系统代理，新建一个类型为直接连接的代理</span><br><span class="line">		proxySelector = new NullProxySelector();</span><br><span class="line">	&#125;</span><br><span class="line">	cookieJar = CookieJar.NO_COOKIES;</span><br><span class="line">	socketFactory = SocketFactory.getDefault();</span><br><span class="line">	hostnameVerifier = OkHostnameVerifier.INSTANCE;</span><br><span class="line">	certificatePinner = CertificatePinner.DEFAULT;</span><br><span class="line">	proxyAuthenticator = Authenticator.NONE;</span><br><span class="line">	authenticator = Authenticator.NONE;</span><br><span class="line">	connectionPool = new ConnectionPool();</span><br><span class="line">	dns = Dns.SYSTEM;</span><br><span class="line">	followSslRedirects = true;</span><br><span class="line">	followRedirects = true;</span><br><span class="line">	retryOnConnectionFailure = true;</span><br><span class="line">	callTimeout = 0;</span><br><span class="line">	connectTimeout = 10_000;</span><br><span class="line">	readTimeout = 10_000;</span><br><span class="line">	writeTimeout = 10_000;</span><br><span class="line">	pingInterval = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>OkhttpClient初始化的值：</p>
+<ol>
+<li><code>Dispatcher dispatcher</code>：调度器，⽤于调度线程从后台发起的⽹络请求，有后台总请求数和单主机总请求数的限制。</li>
+<li><code>List&lt;Protocol&gt; protocols</code>：⽀持的应⽤层协议，即 HTTP/1.1、HTTP/2 等。</li>
+<li><code>List connectionSpecs</code>：：应⽤层⽀持的 Socket 设置，即使⽤明⽂传输（⽤于 HTTP）还是某个版本的 TLS（⽤于 HTTPS）。</li>
+<li><code>EventListener.Factory eventListenerFactory</code>：事件监听工厂，所有的开始、连接、取得结果事件都会有一个相匹配的结束或释放事件。</li>
+<li><code>ProxySelector proxySelector</code>：代理服务器，获取系统的代理，如果不存在系统代理，新建一个类型为直接连接的代理。</li>
+<li><code>CookieJar cookieJar</code>：管理 Cookie 的控制器。OkHttp 提供了 Cookie 存取的判断⽀持（即何时存 何时取，但没有给出如何存取。所以需自己实现存取Cookie，如⽤ Map 存在内存⾥，或者存在本地存储或者数据库中。</li>
+<li><code>SocketFactory socketFactory</code>：socket工厂。</li>
+<li><code>HostnameVerifier hostnameVerifier</code>：于验证 HTTPS 握⼿过程中下载到的证书所属者是否和⾃⼰要访问的主机域名是否⼀致。</li>
+<li><code>CertificatePinner certificatePinner</code>：⽤于设置 HTTPS 握⼿过程中针对某个Host 的 Certificate Public Key Pinner，即把⽹站证书链中的每⼀个证书公钥直接拿来提前配置进 OkHttpClient ⾥去，以跳过本地根证书，直接从代码⾥进⾏认证。这种⽤法⽐较少⻅，⼀般⽤于防⽌⽹站证书被⼈仿制。</li>
+<li><code>Authenticator proxyAuthenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</li>
+<li><code>Authenticator authenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</li>
+<li><code>ConnectionPool connectionPool</code>：连接池，重复使用HTTP和HTTP / 2连接以减少网络延迟，访问同一个地址的HTTP请求可以共享同一个连接。</li>
+<li><code>Dns dns</code>：解析主机名IP地址的域名，默认使用系统的DNS服务，应用程序也可提供自己的实现来使用不同的DNS服务器，选择IPv6地址、IPv4地址或强制使用特定的已知IP地址。</li>
+<li><code>boolean followSslRedirects</code>：在重定向时，如果原先请求的是 http ⽽重定向的⽬标是 https，或者原先请求的是 https ⽽重定向的⽬标是 http，是否依然⾃动 follow。（不是「是否⾃动 follow HTTPS URL 重定向的意思，⽽是是否⾃动 follow 在 HTTP 和HTTPS 之间切换的重定向）默认为 true ；</li>
+<li><code>boolean followRedirects</code> ：遇到重定向的要求是，是否⾃动 follow，默认为 true 。</li>
+<li><code>boolean retryOnConnectionFailure</code>：在请求失败的时候是否⾃动重试。注意，⼤多数的请求失败并不属于 OkHttp 所定义的「需要重试」，这种重试只适⽤于「同⼀个域名的多个 IP 切换重试」「Socket 失效重试」等情况，默认为 true 。</li>
+<li><code>int callTimeout</code>：发起请求的超时时间，默认为10_000。</li>
+<li><code>int connectTimeout</code>：建⽴连接（TCP 或 TLS）的超时时间，默认为10_000。</li>
+<li><code>int readTimeout</code>：发起请求到读到响应数据的超时时间，默认为10_000。</li>
+<li><code>int writeTimeout</code>：发起请求并被⽬标服务器接受的超时时间（因为有时候目标服务器可能由于某种原因⽽不读取你的 Request），默认为10_000；</li>
+<li><code>int pingInterval</code>：间隔时间。</li>
+<li><code>List&lt;Interceptor&gt; interceptors</code>：拦截器配置。</li>
+<li><code>List networkInterceptors</code>：直接和⽹络请求交互的 Interceptor 配置到这⾥，如如果查看返回的 301 报⽂或者未解压的 Response Body，需要在这⾥配置。</li>
+<li><code>Cache cache</code>：Cache 存储的配置。默认是没有，如果需要⽤，得⾃⼰配置出 Cache 存储的⽂件位置以及存储空间上限。</li>
+</ol>
 </li>
 </ul>
 <h1 id="Reqeuest的构建"><a href="#Reqeuest的构建" class="headerlink" title="Reqeuest的构建"></a>Reqeuest的构建</h1><h1 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h1><h1 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h1>
@@ -713,7 +743,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">71.8k</span>
+    <span title="Site words total count">72.7k</span>
   
 </div>
 
