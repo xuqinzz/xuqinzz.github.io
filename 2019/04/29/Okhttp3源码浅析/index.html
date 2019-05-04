@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="Okhttp简介 Okhttp是一个http客户端，默认提供一下支持：  HTTP / 2支持允许同一主机的所有请求共享socket。 在HTTP / 2不可用的情况下，Okhttp的连接池将会减少请求延迟。  通过GZIP压缩减少数据大小。 通过响应缓存完全避免重复的网络请求。   Okhttp的使用12345678910111213141516171819202122232425262728/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-03T17:42:46.438Z">
+<meta property="og:updated_time" content="2019-05-04T14:39:45.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Okhttp3源码浅析">
 <meta name="twitter:description" content="Okhttp简介 Okhttp是一个http客户端，默认提供一下支持：  HTTP / 2支持允许同一主机的所有请求共享socket。 在HTTP / 2不可用的情况下，Okhttp的连接池将会减少请求延迟。  通过GZIP压缩减少数据大小。 通过响应缓存完全避免重复的网络请求。   Okhttp的使用12345678910111213141516171819202122232425262728/">
@@ -402,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.3k
+                  3.2k
                 </span>
               
 
@@ -418,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  13
                 </span>
               
             </div>
@@ -450,42 +450,174 @@
 </blockquote>
 <h1 id="Okhttp的使用"><a href="#Okhttp的使用" class="headerlink" title="Okhttp的使用"></a>Okhttp的使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 创建请求客户端 OkhttpClient</span><br><span class="line">OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</span><br><span class="line">// 构建请求体</span><br><span class="line">Request request = new Request</span><br><span class="line">		.Builder()</span><br><span class="line">		.url(&quot;www.github.com&quot;)</span><br><span class="line">		.addHeader(&quot;token&quot;, &quot;70DA53F9B9D8A3D6345F1A7C4BC1A4A8&quot;)</span><br><span class="line">		.build();</span><br><span class="line">// 生成一个call对象 由RealCall实现Call接口的方法</span><br><span class="line">Call call = okHttpClient.newCall(request);</span><br><span class="line">try &#123;</span><br><span class="line">	// 同步请求</span><br><span class="line">	Response response = call.execute();</span><br><span class="line">	// 异步请求</span><br><span class="line">	call.enqueue(new Callback() &#123;</span><br><span class="line">		@Override</span><br><span class="line">		public void onFailure(Call call, IOException e) &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		@Override</span><br><span class="line">		public void onResponse(Call call, Response response) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="OkhttpClient的创建"><a href="#OkhttpClient的创建" class="headerlink" title="OkhttpClient的创建"></a>OkhttpClient的创建</h1><p><code>OkHttpClient okHttpClient = new OkHttpClient.Builder().build();</code></p>
-<h2 id="OkhttpClient中使用建造者设计模式进行初始化"><a href="#OkhttpClient中使用建造者设计模式进行初始化" class="headerlink" title="OkhttpClient中使用建造者设计模式进行初始化"></a>OkhttpClient中使用建造者设计模式进行初始化</h2><ul>
-<li><p>Builder()初始化代码</p>
+<ul>
+<li><p>OkhttpClient中使用建造者设计模式进行初始化，Builder()初始化代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public Builder() &#123;</span><br><span class="line">	dispatcher = new Dispatcher();</span><br><span class="line">	protocols = DEFAULT_PROTOCOLS;</span><br><span class="line">	connectionSpecs = DEFAULT_CONNECTION_SPECS;</span><br><span class="line">	eventListenerFactory = EventListener.factory(EventListener.NONE);</span><br><span class="line">	proxySelector = ProxySelector.getDefault();</span><br><span class="line">	if (proxySelector == null) &#123;</span><br><span class="line">		// 如果不存在系统代理，新建一个类型为直接连接的代理</span><br><span class="line">		proxySelector = new NullProxySelector();</span><br><span class="line">	&#125;</span><br><span class="line">	cookieJar = CookieJar.NO_COOKIES;</span><br><span class="line">	socketFactory = SocketFactory.getDefault();</span><br><span class="line">	hostnameVerifier = OkHostnameVerifier.INSTANCE;</span><br><span class="line">	certificatePinner = CertificatePinner.DEFAULT;</span><br><span class="line">	proxyAuthenticator = Authenticator.NONE;</span><br><span class="line">	authenticator = Authenticator.NONE;</span><br><span class="line">	connectionPool = new ConnectionPool();</span><br><span class="line">	dns = Dns.SYSTEM;</span><br><span class="line">	followSslRedirects = true;</span><br><span class="line">	followRedirects = true;</span><br><span class="line">	retryOnConnectionFailure = true;</span><br><span class="line">	callTimeout = 0;</span><br><span class="line">	connectTimeout = 10_000;</span><br><span class="line">	readTimeout = 10_000;</span><br><span class="line">	writeTimeout = 10_000;</span><br><span class="line">	pingInterval = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
 <li><p>OkhttpClient初始化的值：</p>
 <ol>
-<li><code>Dispatcher dispatcher</code>：调度器，⽤于调度线程从后台发起的⽹络请求，有后台总请求数和单主机总请求数的限制。</li>
-<li><code>List&lt;Protocol&gt; protocols</code>：⽀持的应⽤层协议，即 HTTP/1.1、HTTP/2 等。</li>
-<li><code>List connectionSpecs</code>：：应⽤层⽀持的 Socket 设置，即使⽤明⽂传输（⽤于 HTTP）还是某个版本的 TLS（⽤于 HTTPS）。</li>
-<li><code>EventListener.Factory eventListenerFactory</code>：事件监听工厂，所有的开始、连接、取得结果事件都会有一个相匹配的结束或释放事件。</li>
-<li><code>ProxySelector proxySelector</code>：代理服务器，获取系统的代理，如果不存在系统代理，新建一个类型为直接连接的代理。</li>
-<li><code>CookieJar cookieJar</code>：管理 Cookie 的控制器。OkHttp 提供了 Cookie 存取的判断⽀持（即何时存 何时取，但没有给出如何存取。所以需自己实现存取Cookie，如⽤ Map 存在内存⾥，或者存在本地存储或者数据库中。</li>
-<li><code>SocketFactory socketFactory</code>：socket工厂。</li>
-<li><code>HostnameVerifier hostnameVerifier</code>：于验证 HTTPS 握⼿过程中下载到的证书所属者是否和⾃⼰要访问的主机域名是否⼀致。</li>
-<li><code>CertificatePinner certificatePinner</code>：⽤于设置 HTTPS 握⼿过程中针对某个Host 的 Certificate Public Key Pinner，即把⽹站证书链中的每⼀个证书公钥直接拿来提前配置进 OkHttpClient ⾥去，以跳过本地根证书，直接从代码⾥进⾏认证。这种⽤法⽐较少⻅，⼀般⽤于防⽌⽹站证书被⼈仿制。</li>
-<li><code>Authenticator proxyAuthenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</li>
-<li><code>Authenticator authenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</li>
-<li><code>ConnectionPool connectionPool</code>：连接池，重复使用HTTP和HTTP / 2连接以减少网络延迟，访问同一个地址的HTTP请求可以共享同一个连接。</li>
-<li><code>Dns dns</code>：解析主机名IP地址的域名，默认使用系统的DNS服务，应用程序也可提供自己的实现来使用不同的DNS服务器，选择IPv6地址、IPv4地址或强制使用特定的已知IP地址。</li>
-<li><code>boolean followSslRedirects</code>：在重定向时，如果原先请求的是 http ⽽重定向的⽬标是 https，或者原先请求的是 https ⽽重定向的⽬标是 http，是否依然⾃动 follow。（不是「是否⾃动 follow HTTPS URL 重定向的意思，⽽是是否⾃动 follow 在 HTTP 和HTTPS 之间切换的重定向）默认为 true ；</li>
-<li><code>boolean followRedirects</code> ：遇到重定向的要求是，是否⾃动 follow，默认为 true 。</li>
-<li><code>boolean retryOnConnectionFailure</code>：在请求失败的时候是否⾃动重试。注意，⼤多数的请求失败并不属于 OkHttp 所定义的「需要重试」，这种重试只适⽤于「同⼀个域名的多个 IP 切换重试」「Socket 失效重试」等情况，默认为 true 。</li>
-<li><code>int callTimeout</code>：发起请求的超时时间，默认为10_000。</li>
-<li><code>int connectTimeout</code>：建⽴连接（TCP 或 TLS）的超时时间，默认为10_000。</li>
-<li><code>int readTimeout</code>：发起请求到读到响应数据的超时时间，默认为10_000。</li>
-<li><code>int writeTimeout</code>：发起请求并被⽬标服务器接受的超时时间（因为有时候目标服务器可能由于某种原因⽽不读取你的 Request），默认为10_000；</li>
-<li><code>int pingInterval</code>：间隔时间。</li>
-<li><code>List&lt;Interceptor&gt; interceptors</code>：拦截器配置。</li>
-<li><code>List networkInterceptors</code>：直接和⽹络请求交互的 Interceptor 配置到这⾥，如如果查看返回的 301 报⽂或者未解压的 Response Body，需要在这⾥配置。</li>
-<li><code>Cache cache</code>：Cache 存储的配置。默认是没有，如果需要⽤，得⾃⼰配置出 Cache 存储的⽂件位置以及存储空间上限。</li>
+<li><p><code>Dispatcher dispatcher</code>：调度器，⽤于调度线程从后台发起的⽹络请求，有后台总请求数和单主机总请求数的限制。</p>
+</li>
+<li><p><code>List&lt;Protocol&gt; protocols</code>：⽀持的应⽤层协议，即 HTTP/1.1、HTTP/2 等。</p>
+</li>
+<li><p><code>List connectionSpecs</code>：：应⽤层⽀持的 Socket 设置，即使⽤明⽂传输（⽤于 HTTP）还是某个版本的 TLS（⽤于 HTTPS）。</p>
+</li>
+<li><p><code>EventListener.Factory eventListenerFactory</code>：事件监听工厂，所有的开始、连接、取得结果事件都会有一个相匹配的结束或释放事件。</p>
+</li>
+<li><p><code>ProxySelector proxySelector</code>：代理服务器，获取系统的代理，如果不存在系统代理，新建一个类型为直接连接的代理。</p>
+</li>
+<li><p><code>CookieJar cookieJar</code>：管理 Cookie 的控制器。OkHttp 提供了 Cookie 存取的判断⽀持（即何时存何时取，但没有给出如何存取。所以需自己实现存取Cookie，如⽤ Map 存在内存⾥，或者存在本地存储或者数据库中。</p>
+</li>
+<li><p><code>SocketFactory socketFactory</code>：socket工厂。</p>
+</li>
+<li><p><code>HostnameVerifier hostnameVerifier</code>：于验证 HTTPS 握⼿过程中下载到的证书所属者是否和⾃⼰要访问的主机域名是否⼀致。</p>
+</li>
+<li><p><code>CertificatePinner certificatePinner</code>：⽤于设置 HTTPS 握⼿过程中针对某个Host 的 Certificate Public Key Pinner，即把⽹站证书链中的每⼀个证书公钥直接拿来提前配置进 OkHttpClient ⾥去，以跳过本地根证书，直接从代码⾥进⾏认证。这种⽤法⽐较少⻅，⼀般⽤于防⽌⽹站证书被⼈仿制（ As 中对<code>CertificatePinner</code> 使用 ctrl + Q 可以直接查看文档），具体使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String hostname = &quot;publicobject.com&quot;;</span><br><span class="line">CertificatePinner certificatePinner = new CertificatePinner.Builder()</span><br><span class="line">	.add(hostname, &quot;sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=&quot;)</span><br><span class="line">	.build();</span><br><span class="line">OkHttpClient client = OkHttpClient.Builder()</span><br><span class="line">	.certificatePinner(certificatePinner)</span><br><span class="line">	.build();</span><br><span class="line"></span><br><span class="line">Request request = new Request.Builder()</span><br><span class="line">	.url(&quot;https://&quot; + hostname)</span><br><span class="line">	.build();</span><br><span class="line">client.newCall(request).execute();</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 </li>
 </ul>
-<h1 id="Reqeuest的构建"><a href="#Reqeuest的构建" class="headerlink" title="Reqeuest的构建"></a>Reqeuest的构建</h1><h1 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h1><h1 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h1>
+<ol start="10">
+<li><p><code>Authenticator proxyAuthenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</p>
+</li>
+<li><p><code>Authenticator authenticator</code>：连接代理服务器之前需要进行身份验证或者从原始Web服务器或代理服务器接收质询后执行响应式身份验证，默认为不进行身份验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient okHttpClient = new OkHttpClient.Builder()</span><br><span class="line">	.authenticator(new Authenticator() &#123;</span><br><span class="line">		@Override</span><br><span class="line">		public Request authenticate(Route route, Response response) throws IOException &#123;</span><br><span class="line">			// 调用获取Token接口获取token</span><br><span class="line">			return response.request().newBuilder()</span><br><span class="line">    				.addHeader(&quot;Authorization&quot;,&quot;Bearer token&quot;)</span><br><span class="line">                     .build();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;).build();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="12">
+<li><p><code>ConnectionPool connectionPool</code>：连接池，重复使用HTTP和HTTP / 2连接以减少网络延迟，访问同一个地址的HTTP请求可以共享同一个连接。</p>
+</li>
+<li><p><code>Dns dns</code>：解析主机名IP地址的域名，默认使用系统的DNS服务，应用程序也可提供自己的实现来使用不同的DNS服务器，选择IPv6地址、IPv4地址或强制使用特定的已知IP地址。</p>
+</li>
+<li><p><code>boolean followSslRedirects</code>：在重定向时，如果原先请求的是 http ⽽重定向的⽬标是 https，或者原先请求的是 https ⽽重定向的⽬标是 http，是否依然⾃动 follow。（不是「是否⾃动 follow HTTPS URL 重定向的意思，⽽是是否⾃动 follow 在 HTTP 和HTTPS 之间切换的重定向）默认为 true ；</p>
+</li>
+<li><p><code>boolean followRedirects</code> ：遇到重定向的要求是，是否⾃动 follow，默认为 true 。</p>
+</li>
+<li><p><code>boolean retryOnConnectionFailure</code>：在请求失败的时候是否⾃动重试。注意，⼤多数的请求失败并不属于 OkHttp 所定义的「需要重试」，这种重试只适⽤于「同⼀个域名的多个 IP 切换重试」「Socket 失效重试」等情况，默认为 true 。</p>
+</li>
+<li><p><code>int callTimeout</code>：发起请求的超时时间，默认为10_000。</p>
+</li>
+<li><p><code>int connectTimeout</code>：建⽴连接（TCP 或 TLS）的超时时间，默认为10_000。</p>
+</li>
+<li><p><code>int readTimeout</code>：发起请求到读到响应数据的超时时间，默认为10_000。</p>
+</li>
+<li><p><code>int writeTimeout</code>：发起请求并被⽬标服务器接受的超时时间（因为有时候目标服务器可能由于某种原因⽽不读取你的 Request），默认为10_000；</p>
+</li>
+<li><p><code>int pingInterval</code>：维持心跳ping间隔时间。</p>
+</li>
+<li><p><code>List&lt;Interceptor&gt; interceptors</code>：拦截器配置。</p>
+</li>
+<li><p><code>List networkInterceptors</code>：直接和⽹络请求交互的 Interceptor 配置到这⾥，如果查看返回的 301 报⽂或者未解压的 Response Body，需要在这⾥配置。</p>
+</li>
+<li><p><code>Cache cache</code>：Cache 存储的配置。默认是没有，如果需要⽤，得⾃⼰配置出 Cache 存储的⽂件位置以及存储空间上限。</p>
+</li>
+</ol>
+<h1 id="请求体Request的创建"><a href="#请求体Request的创建" class="headerlink" title="请求体Request的创建"></a>请求体Request的创建</h1><ul>
+<li>request中包含了请求的相关信息url、method、headers、body、tags等。</li>
+<li>request的默认 method 是 GET</li>
+</ul>
+<h1 id="创建Call对象"><a href="#创建Call对象" class="headerlink" title="创建Call对象"></a>创建Call对象</h1><ul>
+<li><p>RealCall是Call接口的实现类所以，<strong>实际上创建的对象是 Call 的实现类 RealCall 对象</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">static RealCall newRealCall(OkHttpClient client, Request originalRequest, boolean forWebSocket) &#123;</span><br><span class="line">	// Safely publish the Call instance to the EventListener.</span><br><span class="line">    RealCall call = new RealCall(client, originalRequest, forWebSocket);</span><br><span class="line">    call.transmitter = new Transmitter(client, call);</span><br><span class="line">	return call;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Transmitter</code>：OkHttp 的应用程序和网络层之间的桥梁，将应用层的函数发射到网络层，提供了应用层的原函数连接、请求、响应和流。</p>
+<ol>
+<li><p>设置连接池，如果没有自定义连接池泽会使用默认的连接池。</p>
+</li>
+<li><p>通过 OkhttpClient 初始化中创建的 eventListenerFactory 创建好监听时间 eventListener 。</p>
+</li>
+<li><p>设置好超时时间。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public Transmitter(OkHttpClient client, Call call) &#123;</span><br><span class="line">    this.client = client;</span><br><span class="line">    this.connectionPool = Internal.instance.realConnectionPool(client.connectionPool());</span><br><span class="line">    this.call = call;</span><br><span class="line">    this.eventListener = client.eventListenerFactory().create(call);</span><br><span class="line">    this.timeout.timeout(client.callTimeoutMillis(), MILLISECONDS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Dispatcher"><a href="#Dispatcher" class="headerlink" title="Dispatcher"></a>Dispatcher</h1><blockquote>
+<p>Dispatcher 调度器中维持了一个线程池，在异步请求时，之所以okHttp高效的原因，这里的线程池起到了一个很重要的原因。    </p>
+</blockquote>
+<ul>
+<li><p><strong>readyAsyncCalls</strong> ：异步请求的就绪队列。</p>
+</li>
+<li><p><strong>runningAsyncCalls</strong> ：异步请求的执行队列。</p>
+</li>
+<li><p><strong>runningSyncCalls</strong>  ：同步请求的执行队列。</p>
+</li>
+<li><p><code>executorService()</code>: 创建线程池，在异步请求的时候，如果异步请求结束，所有线程都空闲超过60秒后，会回收该线程池中的所有空闲线程，构造方法传入的参数分别为：</p>
+<ul>
+<li>核心线程个数，这里设置的是0，也就是说在真正执行的时候才会去创建线程。</li>
+<li>允许的最大线程数量，这里设置的是Integer.MAX_VALUE，但是请求数量是受到了maxRequests限制的。</li>
+<li>空闲线程存活的时间，60秒。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public synchronized ExecutorService executorService() &#123;</span><br><span class="line">    if (executorService == null) &#123;</span><br><span class="line">		executorService = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,</span><br><span class="line">			new SynchronousQueue&lt;&gt;(), Util.threadFactory(&quot;OkHttp Dispatcher&quot;, false));</span><br><span class="line">    &#125;</span><br><span class="line">	return executorService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Override </span><br><span class="line">public Response execute() throws IOException &#123;</span><br><span class="line">	synchronized (this) &#123;</span><br><span class="line">		if (executed) throw new IllegalStateException(&quot;Already Executed&quot;);</span><br><span class="line">		executed = true;</span><br><span class="line">	&#125;</span><br><span class="line">	transmitter.timeoutEnter();</span><br><span class="line">	transmitter.callStart();</span><br><span class="line">	try &#123;</span><br><span class="line">		client.dispatcher().executed(this);</span><br><span class="line">		return getResponseWithInterceptorChain();</span><br><span class="line">	&#125; finally &#123;</span><br><span class="line">		client.dispatcher().finished(this);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>同步代码块中判断该请求是否已经执行，如果执行了则抛出异常，如果未执行则将excuted置为true。</p>
+</li>
+<li><p>超时输入定时器，最终调用的是 AsyncTimeout 类中的e nter() 方法。</p>
+</li>
+<li><p>transmitter.callStart()  开始请求的监听，getStackTraceForCloseable() ，应该是追踪捕捉堆栈信息，调用EventListener的callStart()方法（如果没有自定义 EventListener ，那么callStart()是一个空方法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void callStart() &#123;</span><br><span class="line">    this.callStackTrace = Platform.get().getStackTraceForCloseable(&quot;response.body().close()&quot;);</span><br><span class="line">    eventListener.callStart(call);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将请求call添加到调度器中的同步请求的执行队列中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">synchronized void executed(RealCall call) &#123;</span><br><span class="line">	runningSyncCalls.add(call);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>getResponseWithInterceptorChain()</code>：<strong>通过拦截器链获取响应并返回</strong>。</p>
+</li>
+<li><p>不管请求是否成功都会执行 Dispatcher 的 finished(RealCall call) 方法，首先在同步代码快中判断同步请求的执行队列是否已经移除当前请求，在同步请求已经结束后从同步请求执行队列中移除该请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void finished(RealCall call) &#123;</span><br><span class="line">	finished(runningSyncCalls, call);</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">private &lt;T&gt; void finished(Deque&lt;T&gt; calls, T call) &#123;</span><br><span class="line">	Runnable idleCallback;</span><br><span class="line">	synchronized (this) &#123;</span><br><span class="line">		if (!calls.remove(call)) throw new AssertionError(&quot;Call wasn&apos;t in-flight!&quot;);</span><br><span class="line">		idleCallback = this.idleCallback;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	boolean isRunning = promoteAndExecute();</span><br><span class="line"></span><br><span class="line">    if (!isRunning &amp;&amp; idleCallback != null) &#123;</span><br><span class="line">		idleCallback.run();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li><p><code>promoteAndExecute()</code>将 readyAsyncCalls ( 异步请求的就绪队列 ) 中符合条件的请求提升为 runningAsyncCalls ( 异步请求的执行队列 ) 并在执行程序服务上运行它们。该方法中迭代了异步请求就绪队列，在同步请求中并未向该队列添加请求所以不会执行。因此 executableCalls 也为空第二个迭代也不会执行 isRunning 在同步请求中默认为 false。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private boolean promoteAndExecute() &#123;</span><br><span class="line">	assert (!Thread.holdsLock(this));</span><br><span class="line">    List&lt;AsyncCall&gt; executableCalls = new ArrayList&lt;&gt;();</span><br><span class="line">    boolean isRunning;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">		for (Iterator&lt;AsyncCall&gt; i = readyAsyncCalls.iterator(); i.hasNext(); ) &#123;</span><br><span class="line">			AsyncCall asyncCall = i.next();</span><br><span class="line">			 // Max capacity</span><br><span class="line">			if (runningAsyncCalls.size() &gt;= maxRequests) break;</span><br><span class="line">			// Host max capacity.</span><br><span class="line">			if (asyncCall.callsPerHost().get() &gt;= maxRequestsPerHost) continue; </span><br><span class="line"></span><br><span class="line">			i.remove();</span><br><span class="line">			asyncCall.callsPerHost().incrementAndGet();</span><br><span class="line">			executableCalls.add(asyncCall);</span><br><span class="line">			runningAsyncCalls.add(asyncCall);</span><br><span class="line">		&#125;</span><br><span class="line">		isRunning = runningCallsCount() &gt; 0;</span><br><span class="line">	&#125;</span><br><span class="line">    for (int i = 0, size = executableCalls.size(); i &lt; size; i++) &#123;</span><br><span class="line">		AsyncCall asyncCall = executableCalls.get(i);</span><br><span class="line">		asyncCall.executeOn(executorService());</span><br><span class="line">    &#125;</span><br><span class="line">	return isRunning;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Override </span><br><span class="line">public void enqueue(Callback responseCallback) &#123;</span><br><span class="line">	synchronized (this) &#123;</span><br><span class="line">		if (executed) throw new IllegalStateException(&quot;Already Executed&quot;);</span><br><span class="line">		executed = true;</span><br><span class="line">	&#125;</span><br><span class="line">	transmitter.callStart();</span><br><span class="line">	client.dispatcher().enqueue(new AsyncCall(responseCallback));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>同步代码块，判断请求是否还在执行，如果正在执行则抛出异常。</p>
+</li>
+<li><p>transmitter.callStart()  开始请求的监听，getStackTraceForCloseable() ，应该是追踪捕捉堆栈信息，调用EventListener的callStart()方法（如果没有自定义 EventListener ，那么callStart()是一个空方法）；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void callStart() &#123;</span><br><span class="line">    this.callStackTrace = Platform.get().getStackTraceForCloseable(&quot;response.body().close()&quot;);</span><br><span class="line">    eventListener.callStart(call);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调度器的异步方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void enqueue(AsyncCall call) &#123;</span><br><span class="line">	synchronized (this) &#123;</span><br><span class="line">		readyAsyncCalls.add(call);</span><br><span class="line">		// 使同一域名请求的 AsyncCall 共享原子操作</span><br><span class="line">		if (!call.get().forAsyncCallWebSocket) &#123;</span><br><span class="line">        	AsyncCall existingCall = findExistingCallWithHost(call.host());</span><br><span class="line">        	if (existingCall != null) call.reuseCallsPerHostFrom(existingCall);</span><br><span class="line">      	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	promoteAndExecute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>promoteAndExecute()</code>将 readyAsyncCalls ( 异步请求的就绪队列 ) 中符合条件的请求提升为 runningAsyncCalls ( 异步请求的执行队列 ) 并在执行程序服务上运行它们。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private boolean promoteAndExecute() &#123;</span><br><span class="line">	assert (!Thread.holdsLock(this));</span><br><span class="line">    List&lt;AsyncCall&gt; executableCalls = new ArrayList&lt;&gt;();</span><br><span class="line">    boolean isRunning;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">		for (Iterator&lt;AsyncCall&gt; i = readyAsyncCalls.iterator(); i.hasNext(); ) &#123;</span><br><span class="line">			AsyncCall asyncCall = i.next();</span><br><span class="line">			 // Max capacity</span><br><span class="line">			if (runningAsyncCalls.size() &gt;= maxRequests) break;</span><br><span class="line">			// Host max capacity.</span><br><span class="line">			if (asyncCall.callsPerHost().get() &gt;= maxRequestsPerHost) continue; </span><br><span class="line">			</span><br><span class="line">			i.remove();</span><br><span class="line">			asyncCall.callsPerHost().incrementAndGet();</span><br><span class="line">			executableCalls.add(asyncCall);</span><br><span class="line">			runningAsyncCalls.add(asyncCall);</span><br><span class="line">		&#125;</span><br><span class="line">		isRunning = runningCallsCount() &gt; 0;</span><br><span class="line">	&#125;</span><br><span class="line">    for (int i = 0, size = executableCalls.size(); i &lt; size; i++) &#123;</span><br><span class="line">		AsyncCall asyncCall = executableCalls.get(i);</span><br><span class="line">		asyncCall.executeOn(executorService());</span><br><span class="line">    &#125;</span><br><span class="line">	return isRunning;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建集合 <strong>executableCalls</strong> 添加并存储可执行的 Call 。</li>
+<li>遍历准备好的异步请求队列 <strong>readyAsyncCalls</strong> 。<ul>
+<li>检验正在运行的异步请求队列 runningAsyncCalls 的大小数量，是否超过了最大请求数 <strong>maxRequests</strong>  默认为64，如果超过了最大的请求个数，直接跳出循环，结束对readyAsyncCalls的遍历。</li>
+<li>在遍历的时候会校验异步请求每个主机的请求数是否超过主机最大请求数 <strong>maxRequestsPerHost</strong> 默认为5，若超过，则跳过这次循环，直接进入下一次循环。</li>
+</ul>
+</li>
+<li>将当前 host 的请求数目加1。</li>
+<li>将遍历到的 AsyncCall 添加到可执行队列 executableCalls 和异步请求的执行队列 <strong>runningAsyncCalls</strong> 中，并在 异步请求就绪队列 <strong>readyAsyncCalls</strong> 中移除此请求。</li>
+<li>依次调用可执行队列 executableCalls 中 AsyncCall 的异步方法，并传入线程池。</li>
+</ul>
+<h2 id="AsyncCall类"><a href="#AsyncCall类" class="headerlink" title="AsyncCall类"></a>AsyncCall类</h2><ul>
+<li><p>AsyncCal l类是 RealCall 的一个内部类。</p>
+</li>
+<li><p>RealCall 异步请求的会调用到该类的 executeOn(）方法，执行相关异步请求操作，该方法中线程池对象 <code>executorService</code> 调用 execute () 方法并传入了 AsyncCall 对象并调用 AsyncCall 的 execute() 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void executeOn(ExecutorService executorService) &#123;</span><br><span class="line">	assert (!Thread.holdsLock(client.dispatcher()));</span><br><span class="line">	boolean success = false;</span><br><span class="line">	try &#123;</span><br><span class="line">		executorService.execute(this);</span><br><span class="line">		success = true;</span><br><span class="line">	&#125; catch (RejectedExecutionException e) &#123;</span><br><span class="line">		InterruptedIOException ioException = new InterruptedIOException(&quot;executor rejected&quot;);</span><br><span class="line">		ioException.initCause(e);</span><br><span class="line">		transmitter.noMoreExchanges(ioException);</span><br><span class="line">		responseCallback.onFailure(RealCall.this, ioException);</span><br><span class="line">	&#125; finally &#123;</span><br><span class="line">		if (!success) &#123;</span><br><span class="line">			// This call is no longer running!</span><br><span class="line">			client.dispatcher().finished(this); </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AsyncCal  父类 NamedRunnable 只做了一件事就是执行execute() 方法，execute() 方法具体实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Override </span><br><span class="line">protected void execute() &#123;</span><br><span class="line">	boolean signalledCallback = false;</span><br><span class="line">	transmitter.timeoutEnter();</span><br><span class="line">	try &#123;</span><br><span class="line">		Response response = getResponseWithInterceptorChain();</span><br><span class="line">		signalledCallback = true;</span><br><span class="line">		responseCallback.onResponse(RealCall.this, response);</span><br><span class="line">	&#125; catch (IOException e) &#123;</span><br><span class="line">		if (signalledCallback) &#123;</span><br><span class="line">		// Do not signal the callback twice!</span><br><span class="line">		Platform.get().log(INFO, &quot;Callback failure for &quot; + toLoggableString(), e);</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			responseCallback.onFailure(RealCall.this, e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; finally &#123;</span><br><span class="line">		client.dispatcher().finished(this);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>getResponseWithInterceptorChain() 放回 Response 对象，然后判断retryAndFollowUpInterceptor是否取消回调CallBack接口的onFailure()或onResponse()方法，最后finally中，和同步请求的处理一样，调用了Dispatcher对象的finished()方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void finished(AsyncCall call) &#123;</span><br><span class="line">	call.callsPerHost().decrementAndGet();</span><br><span class="line">	finished(runningAsyncCalls, call);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="getResponseWithInterceptorChain-通过拦截器链获取响应并返回"><a href="#getResponseWithInterceptorChain-通过拦截器链获取响应并返回" class="headerlink" title="getResponseWithInterceptorChain() 通过拦截器链获取响应并返回"></a>getResponseWithInterceptorChain() 通过拦截器链获取响应并返回</h1>
       
     </div>
     
@@ -709,7 +841,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Okhttp简介"><span class="nav-number">1.</span> <span class="nav-text">Okhttp简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Okhttp的使用"><span class="nav-number">2.</span> <span class="nav-text">Okhttp的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkhttpClient的创建"><span class="nav-number">3.</span> <span class="nav-text">OkhttpClient的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OkhttpClient中使用建造者设计模式进行初始化"><span class="nav-number">3.1.</span> <span class="nav-text">OkhttpClient中使用建造者设计模式进行初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reqeuest的构建"><span class="nav-number">4.</span> <span class="nav-text">Reqeuest的构建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步请求"><span class="nav-number">5.</span> <span class="nav-text">同步请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步请求"><span class="nav-number">6.</span> <span class="nav-text">异步请求</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Okhttp简介"><span class="nav-number">1.</span> <span class="nav-text">Okhttp简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Okhttp的使用"><span class="nav-number">2.</span> <span class="nav-text">Okhttp的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkhttpClient的创建"><span class="nav-number">3.</span> <span class="nav-text">OkhttpClient的创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#请求体Request的创建"><span class="nav-number">4.</span> <span class="nav-text">请求体Request的创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建Call对象"><span class="nav-number">5.</span> <span class="nav-text">创建Call对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dispatcher"><span class="nav-number">6.</span> <span class="nav-text">Dispatcher</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步请求"><span class="nav-number">7.</span> <span class="nav-text">同步请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步请求"><span class="nav-number">8.</span> <span class="nav-text">异步请求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AsyncCall类"><span class="nav-number">8.1.</span> <span class="nav-text">AsyncCall类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#getResponseWithInterceptorChain-通过拦截器链获取响应并返回"><span class="nav-number">9.</span> <span class="nav-text">getResponseWithInterceptorChain() 通过拦截器链获取响应并返回</span></a></li></ol></div>
             
 
           </div>
@@ -743,7 +875,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">72.7k</span>
+    <span title="Site words total count">74.7k</span>
   
 </div>
 
