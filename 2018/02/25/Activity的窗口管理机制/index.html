@@ -89,12 +89,12 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="上图为Activity的窗口结构图，每一个Activity都包含了一个Window对象，而Window对象通常由PhoneWindow实现。DecorView是一个应用窗口的根容器，它本质上是一个FrameLayout。DecorView有唯一一个子View也就是LinearLayout，包含两个子元素FrameLayout，一个是装载了TitleView（ActionBar的容器），另一个是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%BB%93%E6%9E%84%E5%9B%BE">
-<meta property="og:updated_time" content="2019-04-29T14:03:05.899Z">
+<meta property="og:image" content="http://images.xuqinzz.cn/Activity%E7%BB%93%E6%9E%84%E5%9B%BE">
+<meta property="og:updated_time" content="2019-08-25T14:44:33.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity的窗口管理机制">
 <meta name="twitter:description" content="上图为Activity的窗口结构图，每一个Activity都包含了一个Window对象，而Window对象通常由PhoneWindow实现。DecorView是一个应用窗口的根容器，它本质上是一个FrameLayout。DecorView有唯一一个子View也就是LinearLayout，包含两个子元素FrameLayout，一个是装载了TitleView（ActionBar的容器），另一个是">
-<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%BB%93%E6%9E%84%E5%9B%BE">
+<meta name="twitter:image" content="http://images.xuqinzz.cn/Activity%E7%BB%93%E6%9E%84%E5%9B%BE">
 
 
 
@@ -441,7 +441,7 @@
       
 
       
-        <p><img src="http://ouv36g1sw.bkt.clouddn.com/Activity%E7%BB%93%E6%9E%84%E5%9B%BE" alt="Activity窗口结构图"></p>
+        <p><img src="http://images.xuqinzz.cn/Activity%E7%BB%93%E6%9E%84%E5%9B%BE" alt="Activity窗口结构图"></p>
 <blockquote>
 <p>上图为Activity的窗口结构图，每一个Activity都包含了一个Window对象，而Window对象通常由PhoneWindow实现。DecorView是一个应用窗口的根容器，它本质上是一个FrameLayout。DecorView有唯一一个子View也就是LinearLayout，包含两个子元素FrameLayout，一个是装载了TitleView（ActionBar的容器），另一个是ContentView（窗口内容的容器）。我们平常用的setContentView就是设置ContentView的子View,内部实现为PhoneWindow中的setContentView()中初始化DecorView后的LayoutInflater.inflate(layoutResID, mContentParent);方法。上图还表达了每个Activity都与一个Window（具体来说是PhoneWindow）相关联，用户界面则由Window所承载。</p>
 </blockquote>

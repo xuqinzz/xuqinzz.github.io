@@ -89,15 +89,15 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="Canvas.drawXXX() 是自定义绘制最基本的操作。通过该方法可以绘制圆、方、图像、和文字，并且组合这些内容，在通过Paint的一些常见方法来对绘制内容的颜色和风格进行简单配置。  View的坐标系 在 Android 里，每个 View 都有一个自己的坐标系，彼此之间是不影响的。这个坐标系的原点是 View 左上角的那个点；水平方向是 x 轴，右正左负；竖直方向是 y 轴，下正上负。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/EVEN_ODD%E5%A5%87%E5%81%B6%E5%8E%9F%E5%88%99.jpg">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/WINDING%E9%9D%9E%E9%9B%B6%E7%8E%AF%E7%BB%95%E6%95%B0%E5%8E%9F%E5%88%99">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/WINDING%E5%92%8CEVend_ODD%E5%AE%8C%E6%95%B4%E6%95%88%E6%9E%9C">
-<meta property="og:updated_time" content="2018-02-09T15:06:42.775Z">
+<meta property="og:image" content="http://images.xuqinzz.cn/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA">
+<meta property="og:image" content="http://images.xuqinzz.cn/EVEN_ODD%E5%A5%87%E5%81%B6%E5%8E%9F%E5%88%99.jpg">
+<meta property="og:image" content="http://images.xuqinzz.cn/WINDING%E9%9D%9E%E9%9B%B6%E7%8E%AF%E7%BB%95%E6%95%B0%E5%8E%9F%E5%88%99">
+<meta property="og:image" content="http://images.xuqinzz.cn/WINDING%E5%92%8CEVend_ODD%E5%AE%8C%E6%95%B4%E6%95%88%E6%9E%9C">
+<meta property="og:updated_time" content="2019-08-25T14:53:21.504Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自定View之Canvas的系列方法及 Paint最常见的使用">
 <meta name="twitter:description" content="Canvas.drawXXX() 是自定义绘制最基本的操作。通过该方法可以绘制圆、方、图像、和文字，并且组合这些内容，在通过Paint的一些常见方法来对绘制内容的颜色和风格进行简单配置。  View的坐标系 在 Android 里，每个 View 都有一个自己的坐标系，彼此之间是不影响的。这个坐标系的原点是 View 左上角的那个点；水平方向是 x 轴，右正左负；竖直方向是 y 轴，下正上负。">
-<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA">
+<meta name="twitter:image" content="http://images.xuqinzz.cn/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA">
 
 
 
@@ -477,7 +477,6 @@
 <li><code>Paint.setAntiAlias(boolean aa)</code> 设置抗锯齿开关</li>
 <li><code>Paint.setTextAlign(Align align)</code>设置文字居中，左对齐，右对齐</li>
 </ul>
-<p>​</p>
 </li>
 </ol>
 <h2 id="颜色填充"><a href="#颜色填充" class="headerlink" title="颜色填充"></a>颜色填充</h2><blockquote>
@@ -620,18 +619,21 @@
 <li><code>INVERSE_EVEN_ODD</code></li>
 <li><code>INVERSE_WINDING</code></li>
 </ul>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA" alt="EVEN_ODD和WINDING效果展示"></p>
-<p>​</p>
+<p><img src="http://images.xuqinzz.cn/EVEN_ODD%E5%92%8CWINDING%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA" alt="EVEN_ODD和WINDING效果展示"></p>
 </li>
+</ul>
+</li>
+</ul>
+<ul>
 <li><h5 id="EVEN-ODD："><a href="#EVEN-ODD：" class="headerlink" title="EVEN_ODD："></a>EVEN_ODD：</h5><ul>
 <li><p><strong>even-odd rule （奇偶原则）</strong>：对于平面中的任意一点，向任意方向射出一条射线，这条射线和图形相交的次数（相交才算，相切不算哦）如果是奇数，则这个点被认为在图形内部，是要被涂色的区域；如果是偶数，则这个点被认为在图形外部，是不被涂色的区域。</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/EVEN_ODD%E5%A5%87%E5%81%B6%E5%8E%9F%E5%88%99.jpg" alt="EVEN_ODD奇偶原则"></p>
+<p><img src="http://images.xuqinzz.cn/EVEN_ODD%E5%A5%87%E5%81%B6%E5%8E%9F%E5%88%99.jpg" alt="EVEN_ODD奇偶原则"></p>
 </li>
 </ul>
 </li>
 <li><h5 id="WINDING"><a href="#WINDING" class="headerlink" title="WINDING"></a>WINDING</h5><ul>
 <li><p><strong>non-zero winding rule （非零环绕数原则）</strong>：从平面中的点向任意方向射出一条射线，以 0 为初始值，对于射线和图形的所有交点，遇到每个顺时针的交点（图形从射线的左边向右穿过）把结果加 1，遇到每个逆时针的交点（图形从射线的右边向左穿过）把结果减 1，最终把所有的交点都算上，得到的结果如果不是 0，则认为这个点在图形内部，是要被涂色的区域；如果是 0，则认为这个点在图形外部，是不被涂色的区域。</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/WINDING%E9%9D%9E%E9%9B%B6%E7%8E%AF%E7%BB%95%E6%95%B0%E5%8E%9F%E5%88%99" alt="WINDING非零环绕数原则"></p>
+<p><img src="http://images.xuqinzz.cn/WINDING%E9%9D%9E%E9%9B%B6%E7%8E%AF%E7%BB%95%E6%95%B0%E5%8E%9F%E5%88%99" alt="WINDING非零环绕数原则"></p>
 </li>
 <li><p><strong>图形的方向</strong>：对于添加子图形类方法（如 <code>Path.addCircle()</code> <code>Path.addRect()</code>）的方向，由方法的 <code>dir</code> 参数来控制，这个在前面已经讲过了；而对于画线类的方法（如 <code>Path.lineTo()</code> <code>Path.arcTo()</code>）就更简单了，线的方向就是图形的方向。</p>
 </li>
@@ -640,9 +642,7 @@
 <li><p><strong>INVERSE_EVEN_ODD</strong> 和 <strong>INVERSE_WINDING</strong>，只是把<strong>EVEN_ODD</strong>和<strong>INVERSE_WINDING</strong>效果进行反转而已。</p>
 </li>
 <li><p><strong>EVEN_ODD</strong>和<strong>INVERSE_WINDING</strong>完整效果图</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/WINDING%E5%92%8CEVend_ODD%E5%AE%8C%E6%95%B4%E6%95%88%E6%9E%9C" alt="WINDING和EVend_ODD完整效果"></p>
-</li>
-</ul>
+<p><img src="http://images.xuqinzz.cn/WINDING%E5%92%8CEVend_ODD%E5%AE%8C%E6%95%B4%E6%95%88%E6%9E%9C" alt="WINDING和EVend_ODD完整效果"></p>
 </li>
 </ul>
 

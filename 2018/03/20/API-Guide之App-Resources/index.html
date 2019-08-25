@@ -89,12 +89,12 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="Providing Resources提供资源 App应该始终外部化应用资源，如图像和代码中的字符串资源，这样有利于单独维护这些资源。并且应该将资源分组到专门命名的资源目录中，以便为特定的设备提供备用资源。在运行时，Android 会根据当前配置使用适当的资源。例如，您可能需要根据屏幕尺寸提供不同的 UI 布局，或者根据语言设置提供不同的字符串。  资源类型目录 项目 res/ 目录内支持的资源目">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE">
-<meta property="og:updated_time" content="2018-04-21T17:29:58.849Z">
+<meta property="og:image" content="http://images.xuqinzz.cn/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE">
+<meta property="og:updated_time" content="2019-08-25T14:46:08.029Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="API Guide之App Resources">
 <meta name="twitter:description" content="Providing Resources提供资源 App应该始终外部化应用资源，如图像和代码中的字符串资源，这样有利于单独维护这些资源。并且应该将资源分组到专门命名的资源目录中，以便为特定的设备提供备用资源。在运行时，Android 会根据当前配置使用适当的资源。例如，您可能需要根据屏幕尺寸提供不同的 UI 布局，或者根据语言设置提供不同的字符串。  资源类型目录 项目 res/ 目录内支持的资源目">
-<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE">
+<meta name="twitter:image" content="http://images.xuqinzz.cn/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE">
 
 
 
@@ -700,7 +700,7 @@
 <li><p>淘汰与设备配置冲突的资源文件。</p>
 </li>
 <li><p>选择列表中（下一个）优先级最高的限定符。（先从 MCC 开始，然后下移。）</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE" alt="Android 如何查找最佳匹配资源的流程图"></p>
+<p><img src="http://images.xuqinzz.cn/Android%20%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%9C%80%E4%BD%B3%E5%8C%B9%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE" alt="Android 如何查找最佳匹配资源的流程图"></p>
 </li>
 <li><p>是否有资源目录包括此限定符?</p>
 <ul>
@@ -795,17 +795,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class RetainedFragment extends Fragment &#123;</span><br><span class="line"></span><br><span class="line">    // data object we want to retain</span><br><span class="line">    private MyDataObject data;</span><br><span class="line"></span><br><span class="line">    // this method is only called once for this fragment</span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        // retain this fragment</span><br><span class="line">        setRetainInstance(true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setData(MyDataObject data) &#123;</span><br><span class="line">        this.data = data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public MyDataObject getData() &#123;</span><br><span class="line">        return data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后，使用 FragmentManager 将片段添加到 Activity。在运行时配置变更期间再次启动 Activity 时，可以获得片段中的数据对象。 例如，按如下方式定义 Activity：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">public class MyActivity extends Activity &#123;</span><br><span class="line"></span><br><span class="line">    private RetainedFragment dataFragment;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.main);</span><br><span class="line"></span><br><span class="line">        // find the retained fragment on activity restarts</span><br><span class="line">        FragmentManager fm = getFragmentManager();</span><br><span class="line">        dataFragment = (DataFragment) fm.findFragmentByTag(“data”);</span><br><span class="line"></span><br><span class="line">        // create the fragment and data the first time</span><br><span class="line">        if (dataFragment == null) &#123;</span><br><span class="line">            // add the fragment</span><br><span class="line">            dataFragment = new DataFragment();</span><br><span class="line">            fm.beginTransaction().add(dataFragment, “data”).commit();</span><br><span class="line">            // load the data from the web</span><br><span class="line">            dataFragment.setData(loadMyData());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // the data is available in dataFragment.getData()</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">// onCreate() 添加了一个片段或恢复了对它的引用。onCreate() 还将有状态的对象存储在片段实例内部。</span><br><span class="line">// onDestroy() 对所保留的片段实例内的有状态对象进行更新</span><br><span class="line">    @Override</span><br><span class="line">    public void onDestroy() &#123;</span><br><span class="line">        super.onDestroy();</span><br><span class="line">        // store the data in the fragment</span><br><span class="line">        dataFragment.setData(collectMyLoadedData());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​</p>
-</li>
-<li><p>注意：**尽管您可以存储任何对象，但是切勿传递与 <code>Activity</code> 绑定的对象，例如，<code>Drawable</code>、<code>Adapter</code>、<code>View</code> 或其他任何与 <code>Context</code> 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。 （泄漏资源意味着应用将继续持有这些资源，但是无法对其进行垃圾回收，因此可能会丢失大量内存。）</p>
 </li>
 </ol>
 </li>
 </ul>
-<h2 id="自行变更配置"><a href="#自行变更配置" class="headerlink" title="自行变更配置"></a>自行变更配置</h2><ul>
-<li>自行处理配置变更可能导致备用资源的使用更为困难，因为系统不会为您自动应用这些资源。 只能在必须避免 Activity 因配置变更而重启这一万般无奈的情况下，才考虑采用自行处理配置变更这种方法，而且对于大多数应用并不建议使用此方法。</li>
-</ul>
 </li>
+</ul>
+<pre><code>6. 注意：**尽管您可以存储任何对象，但是切勿传递与 `Activity` 绑定的对象，例如，`Drawable`、`Adapter`、`View` 或其他任何与 `Context` 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。 （泄漏资源意味着应用将继续持有这些资源，但是无法对其进行垃圾回收，因此可能会丢失大量内存。）
+</code></pre><h2 id="自行变更配置"><a href="#自行变更配置" class="headerlink" title="自行变更配置"></a>自行变更配置</h2><ul>
+<li>自行处理配置变更可能导致备用资源的使用更为困难，因为系统不会为您自动应用这些资源。 只能在必须避免 Activity 因配置变更而重启这一万般无奈的情况下，才考虑采用自行处理配置变更这种方法，而且对于大多数应用并不建议使用此方法。</li>
 </ul>
 <ul>
 <li><p>要声明由 Activity 处理配置变更，请在清单文件中编辑相应的<activity>元素，以包含 <a href="https://developer.android.google.cn/guide/topics/manifest/activity-element.html#config" target="_blank" rel="noopener"><code>android:configChanges</code></a> 属性以及代表要处理的配置的值。<a href="https://developer.android.google.cn/guide/topics/manifest/activity-element.html#config" target="_blank" rel="noopener"><code>android:configChanges</code></a> 属性的文档中列出了该属性的可能值（最常用的值包括 <code>&quot;orientation&quot;</code> 和 <code>&quot;keyboardHidden&quot;</code>，分别用于避免因屏幕方向和可用键盘改变而导致重启）。可以在该属性中声明多个配置值，方法是用管道 <code>|</code> 字符分隔这些配置值。例如：</activity></p>
@@ -928,10 +926,11 @@
 <li><p>如果应用需要访问受权限保护的功能，则必须在清单中使用 <code>&lt;uses-permission&gt;</code> 元素声明应用需要该权限。将应用安装到设备上之后，安装程序会通过检查签署应用证书的颁发机构并（在某些情况下）询问用户，确定是否授予请求的权限。如果授予权限，则应用能够使用受保护的功能。否则，其访问这些功能的尝试将会失败，并且不会向用户发送任何通知。</p>
 </li>
 <li><p>应用也可以使用权限保护自己的组件。它可以采用由 Android 定义（如 <code>android.Manifest.permission</code> 中所列）或由其他应用声明的任何权限。它也可以定义自己的权限。</p>
-<p>​</p>
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p><strong>库</strong></p>
 <ul>
 <li>每个应用均链接到默认的 Android 库，该库中包括用于开发应用（以及通用类，如 Activity、服务、intent、视图、按钮、应用、ContentProvider）的基本软件包。</li>
@@ -1173,14 +1172,15 @@
 <ul>
 <li><p>当应用请求权限时，系统将向用户显示一个对话框。当用户响应时，系统将调用应用的 <code>onRequestPermissionsResult()</code> 方法，向其传递用户响应。应用必须重写改方法，以了解是否已获得相应权限。回调会将您传递的相同请求代码传递给 <code>requestPermissions()</code>。例如，如果应用请求 <code>READ_CONTACTS</code> 访问权限，则它可能采用以下回调方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onRequestPermissionsResult(int requestCode,</span><br><span class="line">        String permissions[], int[] grantResults) &#123;</span><br><span class="line">    switch (requestCode) &#123;</span><br><span class="line">        case MY_PERMISSIONS_REQUEST_READ_CONTACTS: &#123;</span><br><span class="line">            // If request is cancelled, the result arrays are empty.</span><br><span class="line">            if (grantResults.length &gt; 0</span><br><span class="line">                &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line"></span><br><span class="line">                // permission was granted, yay! Do the</span><br><span class="line">                // contacts-related task you need to do.</span><br><span class="line"></span><br><span class="line">            &#125; else &#123;</span><br><span class="line"></span><br><span class="line">                // permission denied, boo! Disable the</span><br><span class="line">                // functionality that depends on this permission.</span><br><span class="line">            &#125;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // other &apos;case&apos; lines to check for other</span><br><span class="line">        // permissions this app might request</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​</p>
 </li>
+</ul>
+</li>
+</ul>
+<ul>
 <li><p>系统显示的对话框说明了您的应用需要访问的权限组；它不会列出具体权限。例如，如果请求 <code>READ_CONTACTS</code> 权限，系统对话框只显示应用需要访问设备的联系人。用户只需要为每个权限组授予一次权限。如果应用请求该组中的任何其他权限（已在您的应用清单中列出），系统将自动授予应用这些权限。当请求此权限时，系统会调用 <code>onRequestPermissionsResult()</code> 回调方法，并传递 <code>PERMISSION_GRANTED</code>，如果用户已通过系统对话框明确同意您的权限请求，系统将采用相同方式操作。</p>
 </li>
 <li><p><strong>注</strong>：应用仍需要明确请求其需要的每项权限，即使用户已向应用授予该权限组中的其他权限。此外，权限分组在将来的 Android 版本中可能会发生变化。您的代码不应依赖特定权限属于或不属于相同组这种假设。</p>
 <p>例如，假设应用清单中列出了 <code>READ_CONTACTS</code> 和 <code>WRITE_CONTACTS</code>。如果请求 <code>READ_CONTACTS</code> 且用户授予了此权限，那么，当请求 <code>WRITE_CONTACTS</code> 时，系统将立即授予您该权限，不会与用户交互。如果用户拒绝了某项权限请求，应用应采取适当的操作。例如，应用可能显示一个对话框，解释它为什么无法执行用户已经请求但需要该权限的操作。当系统要求用户授予权限时，用户可以选择指示系统不再要求提供该权限。这种情况下，无论应用在什么时候使用 <code>requestPermissions()</code> 再次要求该权限，系统都会立即拒绝此请求。系统会调用<code>onRequestPermissionsResult()</code> 回调方法，并传递 <code>PERMISSION_DENIED</code>，如果用户再次明确拒绝了应用的请求，系统将采用相同方式操作。这意味着当您调用 <code>requestPermissions()</code> 时，应用不能假设已经发生与用户的任何直接交互。</p>
-</li>
-</ul>
 </li>
 </ul>
 <h2 id="权限请求示例"><a href="#权限请求示例" class="headerlink" title="权限请求示例"></a>权限请求示例</h2><blockquote>
@@ -1310,8 +1310,9 @@
 <h3 id="定义和执行权限"><a href="#定义和执行权限" class="headerlink" title="定义和执行权限"></a>定义和执行权限</h3><ol>
 <li><p>要执行权限，首先必须在AndroidManifest.xml中使用一个或多个<permission>元素声明。</permission></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;manifest</span><br><span class="line">  xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">  package=&quot;com.example.myapp&quot; &gt;</span><br><span class="line">    </span><br><span class="line">    &lt;permission</span><br><span class="line">      android:name=&quot;com.example.myapp.permission.DEADLY_ACTIVITY&quot;</span><br><span class="line">      android:label=&quot;@string/permlab_deadlyActivity&quot;</span><br><span class="line">      android:description=&quot;@string/permdesc_deadlyActivity&quot;</span><br><span class="line">      android:permissionGroup=&quot;android.permission-group.COST_MONEY&quot;</span><br><span class="line">      android:protectionLevel=&quot;dangerous&quot; /&gt;</span><br><span class="line">    ...</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
-<p>​</p>
 </li>
+</ol>
+<ol start="2">
 <li><p>注意：除非所有应用都使用相同的签名证书，否则系统不允许多个应用声明具有相同名称的权限。如果应用声明了权限，则系统不允许用户安装具有相同权限名的其它应用，除非应用的签名证书相同。为避免命名冲突，建议为自定义权限使用反向域名式命名，如com.example.myapp.ENGAGE_HYPERSPACE。</p>
 </li>
 <li><p>必需的使用protectionLevel属性，来告诉系统如何向用户通知需要许可的应用程序，或者允许谁拥有该许可权。</p>

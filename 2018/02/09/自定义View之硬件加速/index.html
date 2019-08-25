@@ -89,14 +89,14 @@
 <meta property="og:site_name" content="跬步">
 <meta property="og:description" content="本质和原理概念 所谓硬件加速，指的是把某些计算工作交给专门的硬件来做，而不是和普通的计算工作一样交给 CPU 来处理。这样不仅减轻了 CPU 的压力，而且由于有了「专人」的处理，这份计算工作的速度也被加快了。这就是「硬件加速」。 对于 Android 来说，硬件加速有它专属的意思：在 Android 里，硬件加速专指把 View 中绘制的计算工作交给 GPU 来处理。进一步地再明确一下，这个「绘制">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
-<meta property="og:image" content="http://ouv36g1sw.bkt.clouddn.com/Fmyy4PcPsSp0P6cpSXFErBvy8GPn.jpg">
-<meta property="og:updated_time" content="2018-02-09T15:16:19.589Z">
+<meta property="og:image" content="http://images.xuqinzz.cn/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
+<meta property="og:image" content="http://images.xuqinzz.cn/%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
+<meta property="og:image" content="http://images.xuqinzz.cn/Fmyy4PcPsSp0P6cpSXFErBvy8GPn.jpg">
+<meta property="og:updated_time" content="2019-08-25T14:55:52.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自定义View之硬件加速">
 <meta name="twitter:description" content="本质和原理概念 所谓硬件加速，指的是把某些计算工作交给专门的硬件来做，而不是和普通的计算工作一样交给 CPU 来处理。这样不仅减轻了 CPU 的压力，而且由于有了「专人」的处理，这份计算工作的速度也被加快了。这就是「硬件加速」。 对于 Android 来说，硬件加速有它专属的意思：在 Android 里，硬件加速专指把 View 中绘制的计算工作交给 GPU 来处理。进一步地再明确一下，这个「绘制">
-<meta name="twitter:image" content="http://ouv36g1sw.bkt.clouddn.com/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
+<meta name="twitter:image" content="http://images.xuqinzz.cn/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B">
 
 
 
@@ -449,10 +449,10 @@
 </ul>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
 <li><p>未开启硬件加速：<code>Canvas</code> 绘制的工作方式是：把要绘制的内容写进一个 <code>Bitmap</code>，然后在之后的渲染过程中，这个 <code>Bitmap</code> 的像素内容被直接用于渲染到屏幕。这种绘制方式的主要计算工作在于把绘制操作转换为像素的过程（例如由一句 <code>Canvas.drawCircle()</code> 来获得一个具体的圆的像素信息），这个过程的计算是由 CPU 来完成的，过程如下图：</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B" alt="未开启硬件加速的绘制过程"></p>
+<p><img src="http://images.xuqinzz.cn/%E6%9C%AA%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B" alt="未开启硬件加速的绘制过程"></p>
 </li>
 <li><p>开启硬件加速：只是把绘制的内容转换为 GPU 的操作保存了下来，然后就把它交给 GPU，最终由 GPU 来完成实际的显示工作。过程如下图：</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B" alt="开启硬件加速绘制过程"></p>
+<p><img src="http://images.xuqinzz.cn/%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B" alt="开启硬件加速绘制过程"></p>
 </li>
 </ul>
 <h2 id="Android中的应用"><a href="#Android中的应用" class="headerlink" title="Android中的应用"></a>Android中的应用</h2><ul>
@@ -470,7 +470,7 @@
 </ul>
 <h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><ul>
 <li><p>受到 GPU 绘制方式的限制，<code>Canvas</code> 的有些方法在硬件加速开启式会失效或无法正常工作。比如，在硬件加速开启时， <code>clipPath()</code> 在 API 18 及以上的系统中才有效。具体的 API 限制和 API 版本的关系如下图：</p>
-<p><img src="http://ouv36g1sw.bkt.clouddn.com/Fmyy4PcPsSp0P6cpSXFErBvy8GPn.jpg" alt="硬件加速的限制"></p>
+<p><img src="http://images.xuqinzz.cn/Fmyy4PcPsSp0P6cpSXFErBvy8GPn.jpg" alt="硬件加速的限制"></p>
 </li>
 </ul>
 <h2 id="View-Layer"><a href="#View-Layer" class="headerlink" title="View Layer"></a>View Layer</h2><blockquote>
